@@ -1,0 +1,30 @@
+﻿@model PetDetailsViewModel
+
+<br />
+<div class="row">
+    <div class="col-8">
+        <img class="w-100" src="https://d2rd7etdn93tqb.cloudfront.net/wp-content/uploads/2020/09/instagram-thechowcalledziggy-chow-chow-dog.jpg" alt="Card image cap">
+            </div>
+                <div class="col">
+                    <div class = "align-items-center">
+                        <h5 class="card-title">@Model.Name</h5>
+               
+                        <p class="card-text">@Model.PetTypeName</p>
+                        <p class="card-text">@Model.PetBreedName</p>
+                        <p class="card-text">@Model.Description</p>
+                        <p>Cijena: @Model.Price KM</p>
+                        <p>Prodano: @Model.IsSold</p>
+
+                    </div>
+            </div>  
+ </div>
+
+ <br />
+
+    <a asp-controller="Pet" asp-action="Index" class="btn btn-secondary" style="width:250px">
+    Go back to the list of pets...
+    </a>
+
+<style>
+
+</style>                      

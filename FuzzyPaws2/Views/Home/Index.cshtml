@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <br />
+    <h1 class="display-4">Welcome to our Pet Shop</h1> <br />
+    <h2> Looking for a new fuzzy companion? <br />
+        Check out all available pets <i class="bi bi-arrow-right-circle"></i> <a asp-controller="Pet" asp-action="Index"> HERE </a></h2>
+    <br />
+
+    <h3>Available pet products in our shop
+        <a asp-controller="Product" asp-action="Index">
+        <i class="bi bi-basket"></i>
+        </a>
+    </h3>
+
+    <br />
+
+    <h3>Need a vet appointment? We got you! <br />        
+    </h3>
+    <p>You can book an appointment
+       <a asp-controller="#" asp-action="#">here</a>
+       or talk to us directly via email  
+       <a asp-controller="Home" asp-action="Contact"><i class="bi bi-envelope-plus"></i></a>
+    </p>
+    <img src="https://freepngdownload.com/image/thumb/cat-playing-png.png" class="img-fluid"/>
+
+</div>
+
