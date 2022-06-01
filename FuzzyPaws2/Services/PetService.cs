@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
-using AutoMapper.Internal.Mappers;
 using FuzzyPaws2.Core.Model;
 using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.Pets;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FuzzyPaws2.Services

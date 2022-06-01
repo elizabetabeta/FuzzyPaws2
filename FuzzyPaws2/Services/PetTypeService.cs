@@ -1,4 +1,6 @@
-﻿using FuzzyPaws2.Data;
+﻿using AutoMapper;
+using FuzzyPaws2.Core.Model;
+using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.PetTypes;
@@ -10,9 +12,11 @@ namespace FuzzyPaws2.Services
     public class PetTypeService : IPetTypeService
     {
         private readonly ApplicationDbContext _context;
-        public PetTypeService(ApplicationDbContext context)
+        private readonly IMapper _mapper;
+        public PetTypeService(ApplicationDbContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public async Task<CreateTypeViewModel> CreateTypeAsync()
@@ -42,6 +46,30 @@ namespace FuzzyPaws2.Services
             };
 
             return model;
+        }
+
+        public async Task<Result> CreateAsync(CreateTypeViewModel model)
+        {
+            var mappedType = _mapper.Map<PetType>(model);
+            _context.Add(mappedType);
+            _context.SaveChanges();
+            return Result.Success(mappedType);
+        }
+
+        public async Task<Result> DeleteAsync(CreateTypeViewModel model)
+        {
+            var mappedType = _mapper.Map<PetType>(model);
+            _context.Remove(mappedType);
+            _context.SaveChanges();
+            return Result.Success(mappedType);
+        }
+
+        public async Task<Result> EditAsync(CreateTypeViewModel model)
+        {
+            var mappedType = _mapper.Map<PetType>(model);
+            _context.Update(mappedType);
+            _context.SaveChanges();
+            return Result.Success(mappedType);
         }
     }
 }

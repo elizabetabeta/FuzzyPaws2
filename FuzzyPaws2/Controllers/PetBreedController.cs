@@ -34,16 +34,12 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PetBreed breed)
+        public IActionResult Create(CreateBreedViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _context.PetBreed.Add(breed);
-                _context.SaveChanges();
-                TempData["success"] = "Pet breed added successfully";
-                return RedirectToAction("Index");
-            }
-            return View(breed);
+            _petBreedService.CreateAsync(model);
+            TempData["success"] = "New breed added successfully";
+
+            return RedirectToAction("Index");
         }
 
         //GET
@@ -59,16 +55,12 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PetBreed breed)
+        public IActionResult Edit(CreateBreedViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _context.PetBreed.Update(breed);
-                _context.SaveChanges();
-                TempData["success"] = "Pet type edited successfully";
-                return RedirectToAction("Index");
-            }
-            return View(breed);
+            _petBreedService.EditAsync(model);
+            TempData["success"] = "Breed edited successfully";
+
+            return RedirectToAction("Index");
         }
 
         //GET
@@ -84,17 +76,11 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePetBreedFromDb(int id)
+        public IActionResult Delete(CreateBreedViewModel model)
         {
-            var breed = _context.PetBreed.Find(id);
-            if (breed == null)
-            {
-                return NotFound();
-            }
+            _petBreedService.DeleteAsync(model);
+            TempData["success"] = "Breed removed successfully";
 
-            _context.PetBreed.Remove(breed);
-            _context.SaveChanges();
-            TempData["success"] = "Pet breed removed successfully";
             return RedirectToAction("Index");
 
         }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FuzzyPaws2.Core.Model;
 using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
@@ -37,6 +38,36 @@ namespace FuzzyPaws2.Services
             var model = new CreateBreedViewModel();
 
             return model;
+        }
+
+        public async Task<Result> CreateAsync(CreateBreedViewModel model)
+        {
+            var mappedBreed = _mapper.Map<PetBreed>(model);
+
+            _context.PetBreed.Add(mappedBreed);
+            _context.SaveChanges();
+
+            return Result.Success(mappedBreed);
+        }
+
+        public async Task<Result> DeleteAsync(CreateBreedViewModel model)
+        {
+            var mappedBreed = _mapper.Map<PetBreed>(model);
+
+            _context.PetBreed.Remove(mappedBreed);
+            _context.SaveChanges();
+
+            return Result.Success(mappedBreed);
+        }
+
+        public async Task<Result> EditAsync(CreateBreedViewModel model)
+        {
+            var mappedBreed = _mapper.Map<PetBreed>(model);
+
+            _context.PetBreed.Update(mappedBreed);
+            _context.SaveChanges();
+
+            return Result.Success(mappedBreed);
         }
     }
 }

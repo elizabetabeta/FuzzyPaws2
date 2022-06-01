@@ -1,4 +1,5 @@
-﻿using FuzzyPaws2.Models;
+﻿using FuzzyPaws2.Core.Model;
+using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.PetBreeds;
 
 namespace FuzzyPaws2.Interfaces
@@ -7,6 +8,9 @@ namespace FuzzyPaws2.Interfaces
     {
         Task<PetBreedIndexViewModel> GetPetBreedsAsync();
         Task<CreateBreedViewModel> PrepareCreateBreedModelAsync();
+        Task<Result> CreateAsync(CreateBreedViewModel model);
+        Task<Result> DeleteAsync(CreateBreedViewModel model);
+        Task<Result> EditAsync(CreateBreedViewModel model);
         PetBreed GetById(int id);
     }
 }

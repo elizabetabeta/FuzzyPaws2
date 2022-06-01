@@ -35,16 +35,13 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(PetType type)
+        public IActionResult Create(CreateTypeViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _context.PetType.Add(type);
-                _context.SaveChanges();
-                TempData["success"] = "Pet type added successfully";
-                return RedirectToAction("Index");
-            }
-            return View(type);
+            _petTypeService.CreateAsync(model);
+            TempData["success"] = "Pet type added successfully";
+
+            return RedirectToAction("Index");
+            
         }
 
         //GET
@@ -60,16 +57,12 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PetType type)
+        public IActionResult Edit(CreateTypeViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                _context.PetType.Update(type);
-                _context.SaveChanges();
-                TempData["success"] = "Pet type edited successfully";
-                return RedirectToAction("Index");
-            }
-            return View(type);
+            _petTypeService.EditAsync(model);
+            TempData["success"] = "Pet type edited successfully";
+
+            return RedirectToAction("Index");
         }
 
         //GET
@@ -85,17 +78,11 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult DeletePetTypeFromDb(int? id)
+        public IActionResult Delete(CreateTypeViewModel model)
         {
-            var type = _context.PetType.Find(id);
-            if (type == null)
-            {
-                return NotFound();
-            }
-
-            _context.PetType.Remove(type);
-            _context.SaveChanges();
+            _petTypeService.DeleteAsync(model);
             TempData["success"] = "Pet type removed successfully";
+
             return RedirectToAction("Index");
 
         }
