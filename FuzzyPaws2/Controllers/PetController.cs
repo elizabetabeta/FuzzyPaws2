@@ -68,7 +68,10 @@ namespace FuzzyPaws2.Controllers
             _petService.EditAsync(model);
             TempData["success"] = "Pet edited successfully";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new
+            {
+                id = model.Id
+        }); 
         }
 
         //GET
