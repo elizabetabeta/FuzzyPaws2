@@ -69,5 +69,14 @@ namespace FuzzyPaws2.Services
 
             return Result.Success(mappedBreed);
         }
+
+        public async Task<BreedDetailsViewModel> GetBreedsByIdForDetails(int breedId)
+        {
+            var breed = _context.PetBreed.FirstOrDefault(p => p.Id == breedId);
+
+            BreedDetailsViewModel breedDetailsViewModel = _mapper.Map<BreedDetailsViewModel>(breed);
+
+            return breedDetailsViewModel;
+        }
     }
 }

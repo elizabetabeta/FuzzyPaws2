@@ -8,6 +8,8 @@ namespace FuzzyPaws2.Interfaces
     {
         Task<PetBreedIndexViewModel> GetPetBreedsAsync();
         Task<CreateBreedViewModel> PrepareCreateBreedModelAsync();
+        Task<BreedDetailsViewModel> GetBreedsByIdForDetails(int breedId);
+
         Task<Result> CreateAsync(CreateBreedViewModel model);
         Task<Result> DeleteAsync(CreateBreedViewModel model);
         Task<Result> EditAsync(CreateBreedViewModel model);

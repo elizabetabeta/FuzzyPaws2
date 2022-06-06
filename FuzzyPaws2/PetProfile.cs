@@ -15,6 +15,8 @@ namespace FuzzyPaws2
             CreateMap<Pet, PetDetailsViewModel>()
                 .ForMember(dest => dest.PetBreedName, src => src.MapFrom(x => x.PetBreed.Name))
                 .ForMember(dest => dest.PetTypeName, src => src.MapFrom(x => x.PetType.Name))
+                .ForMember(dest => dest.PetBreedId, src => src.MapFrom(x => x.PetBreed.Id))
+                .ForMember(dest => dest.PetTypeId, src => src.MapFrom(x => x.PetType.Id))
                 ;
             CreateMap<PetCreateViewModel, Pet>();
             CreateMap<Pet, PetCreateViewModel>();
@@ -22,9 +24,15 @@ namespace FuzzyPaws2
             CreateMap<CreateBreedViewModel, PetBreed>();
             CreateMap<PetBreed, CreateBreedViewModel>();
 
+            CreateMap<BreedDetailsViewModel, PetBreed>();
+            CreateMap<PetBreed, BreedDetailsViewModel>();
+
             CreateMap<CreateTypeViewModel, PetType>();
             CreateMap<PetType, CreateTypeViewModel>();
-            
+
+            CreateMap<TypeDetailsViewModel, PetType>();
+            CreateMap<PetType, TypeDetailsViewModel>();
+
             CreateMap<UserCreateViewModel, IdentityUser>();
             CreateMap<IdentityUser, UserCreateViewModel>();
 

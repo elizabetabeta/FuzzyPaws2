@@ -1,0 +1,35 @@
+﻿@model BreedDetailsViewModel
+
+<br />
+<div class="row">
+    <div class="col-4">
+        <img class="w-100" src="~/images/breed-type.jpg" alt="Card image cap">
+    </div>
+                <div class="col">
+                    <div>
+                        <h5 class="card-title">@Model.Name</h5>
+               
+                        <p class="card-text">@Model.Description</p>
+
+                    </div>
+                </div>  
+                
+ </div>
+
+ <br />
+
+ <a asp-controller="PetBreed" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">
+                        <i class="bi bi-pen"></i>
+                        Edit
+                    </a>
+<a asp-controller="PetBreed" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"> 
+                        <i class="bi bi-trash3"></i>
+                        Delete
+                    </a> &nbsp;
+    <a asp-controller="PetBreed" asp-action="Index" class="btn btn-secondary" style="width:250px">
+    List of all breeds
+    </a>
+
+<style>
+
+</style>                      

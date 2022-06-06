@@ -71,5 +71,14 @@ namespace FuzzyPaws2.Services
             _context.SaveChanges();
             return Result.Success(mappedType);
         }
+
+        public async Task<TypeDetailsViewModel> GetTypesByIdForDetails(int typeId)
+        {
+            var type = _context.PetType.FirstOrDefault(p => p.Id == typeId);
+
+            TypeDetailsViewModel typeDetailsViewModel = _mapper.Map<TypeDetailsViewModel>(type);
+
+            return typeDetailsViewModel;
+        }
     }
 }

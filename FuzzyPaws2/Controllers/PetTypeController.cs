@@ -62,7 +62,10 @@ namespace FuzzyPaws2.Controllers
             _petTypeService.EditAsync(model);
             TempData["success"] = "Pet type edited successfully";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new
+            {
+                id = model.Id
+            }); 
         }
 
         //GET
@@ -85,6 +88,15 @@ namespace FuzzyPaws2.Controllers
 
             return RedirectToAction("Index");
 
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await _petTypeService.GetTypesByIdForDetails(id);
+            if (model == null)
+                return NotFound();
+
+            return View(model);
         }
     }
 }

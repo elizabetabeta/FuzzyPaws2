@@ -24,7 +24,7 @@ namespace FuzzyPaws2.Controllers
 
 
         //GET
-        public IActionResult Delete(int id)
+        public IActionResult Delete(string id)
         {
             var userToDelete = _userService.GetById(id);
 

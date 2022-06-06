@@ -36,9 +36,9 @@ namespace FuzzyPaws2.Services
             return model;
         }
 
-        public IdentityUser GetById(int id)
+        public IdentityUser GetById(string id)
         {
-            return _context.AspNetUsers.FirstOrDefault(x => x.Id == id.ToString());
+            return _context.AspNetUsers.FirstOrDefault(x => x.Id == id);
         }
 
         public async Task<Result> DeleteAsync(UserCreateViewModel model)
