@@ -44,5 +44,26 @@ namespace FuzzyPaws2.Controllers
 
             return RedirectToAction("Index");
         }
+
+        //GET
+        public IActionResult Edit(string id)
+        {
+            var userToEdit = _userService.GetById(id);
+
+            var mappedModelUserToEdit = _mapper.Map<UserCreateViewModel>(userToEdit);
+
+            return View(mappedModelUserToEdit);
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(UserCreateViewModel model)
+        {
+            _userService.EditAsync(model);
+            TempData["success"] = "User info edited successfully";
+
+            return RedirectToAction("Index");        
+        }
     }
 }

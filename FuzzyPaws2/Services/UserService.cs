@@ -50,5 +50,15 @@ namespace FuzzyPaws2.Services
 
             return Result.Success(mappedUser);
         }
+
+        public async Task<Result> EditAsync(UserCreateViewModel model)
+        {
+            var mappedUser = _mapper.Map<IdentityUser>(model);
+
+            _context.AspNetUsers.Update(mappedUser);
+            _context.SaveChanges();
+
+            return Result.Success(mappedUser);
+        }
     }
 }
