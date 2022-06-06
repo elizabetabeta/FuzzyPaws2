@@ -3,6 +3,8 @@ using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.PetBreeds;
 using FuzzyPaws2.ViewModels.Pets;
 using FuzzyPaws2.ViewModels.PetTypes;
+using FuzzyPaws2.ViewModels.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace FuzzyPaws2
 {
@@ -22,6 +24,9 @@ namespace FuzzyPaws2
 
             CreateMap<CreateTypeViewModel, PetType>();
             CreateMap<PetType, CreateTypeViewModel>();
+            
+            CreateMap<UserCreateViewModel, IdentityUser>();
+            CreateMap<IdentityUser, UserCreateViewModel>();
 
         }
     }

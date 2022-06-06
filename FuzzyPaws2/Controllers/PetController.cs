@@ -11,11 +11,9 @@ namespace FuzzyPaws2.Controllers
     public class PetController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ApplicationDbContext _context;
         private readonly IPetService _petService;
-        public PetController(ApplicationDbContext context, IPetService petService, IMapper mapper)
+        public PetController(IPetService petService, IMapper mapper)
         {
-            _context = context;
             _petService = petService;
             _mapper = mapper;
         }

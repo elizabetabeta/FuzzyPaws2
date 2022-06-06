@@ -5,6 +5,7 @@ using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -16,6 +17,8 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddScoped<IPetService, PetService>();
 builder.Services.AddScoped<IPetTypeService, PetTypeService>();
 builder.Services.AddScoped<IPetBreedService, PetBreedService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -39,8 +42,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseAuthentication();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
