@@ -1,11 +1,11 @@
 ﻿@model UserCreateViewModel
 
-<form method="post" asp-action="Edit">
+<form method="post" asp-action="EditVet">
     <input asp-for="Id" hidden/>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
-                Edit user description
+                Edit vet description
             </h2>
             <hr />
         </div>
@@ -29,8 +29,8 @@
         <button type="submit" class="btn btn-primary" style="width:150px">
             Update
         </button>
-        <a asp-controller="User" asp-action="Users" class="btn btn-secondary" style="width:250px">
-            List of all users
+        <a asp-controller="User" asp-action="Vets" class="btn btn-secondary" style="width:250px">
+            List of all vets
         </a>
     </div>
 </form>

@@ -6,7 +6,9 @@ namespace FuzzyPaws2.Interfaces
 {
     public interface IUserService
     {
-        Task<UserIndexViewModel> GetUsersAsync();
+        Task<UserIndexViewModel> GetAdminAsync();
+        Task<UserIndexViewModel> GetVetAsync();
+        Task<UserIndexViewModel> GetUserAsync();
         Task<UserCreateViewModel> PrepareCreateViewModelAsync();
         IdentityUser GetById(string id);
         Task<Result> DeleteAsync(UserCreateViewModel model);

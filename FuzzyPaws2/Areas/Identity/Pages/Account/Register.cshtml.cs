@@ -29,13 +29,15 @@ namespace FuzzyPaws2.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +45,7 @@ namespace FuzzyPaws2.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
         }
 
         /// <summary>
@@ -120,6 +123,18 @@ namespace FuzzyPaws2.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+
+                    //DODAVANJE USER KAO DEFAULT ROLU 
+
+                    var defaultrole = _roleManager.FindByNameAsync("User").Result;
+                    if (defaultrole != null)
+                    {
+                        IdentityResult roleresult = await _userManager.AddToRoleAsync(user, defaultrole.Name);
+                    }
+
+                    //KRAJ
+
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

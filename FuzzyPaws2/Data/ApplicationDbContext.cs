@@ -13,6 +13,7 @@ namespace FuzzyPaws2.Data
         {
         }
 
+
         public DbSet<Pet> Pets { get; set; }
         public DbSet<PetType> PetType { get; set; }
         public DbSet<PetBreed> PetBreed { get; set; }

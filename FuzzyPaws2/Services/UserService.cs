@@ -12,18 +12,40 @@ namespace FuzzyPaws2.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public UserService(ApplicationDbContext context, IMapper mapper)
+        public UserService(ApplicationDbContext context, 
+                           IMapper mapper, 
+                          UserManager<IdentityUser> userManager)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
         }
 
-        public async Task<UserIndexViewModel> GetUsersAsync()
+        public async Task<UserIndexViewModel> GetAdminAsync()
         {
             var model = new UserIndexViewModel()
             {
-                AllUsers = await _context.AspNetUsers.ToListAsync()
+                AllUsers = await _userManager.GetUsersInRoleAsync("ADMIN")
+            };
+
+            return model;
+        }
+        public async Task<UserIndexViewModel> GetVetAsync()
+        {
+            var model = new UserIndexViewModel()
+            {
+                AllUsers = await _userManager.GetUsersInRoleAsync("VET")
+            };
+
+            return model;
+        }
+        public async Task<UserIndexViewModel> GetUserAsync()
+        {
+            var model = new UserIndexViewModel()
+            {
+                AllUsers = await _userManager.GetUsersInRoleAsync("USER")
             };
 
             return model;
@@ -43,17 +65,21 @@ namespace FuzzyPaws2.Services
 
         public async Task<Result> DeleteAsync(UserCreateViewModel model)
         {
-            var mappedUser = _mapper.Map<IdentityUser>(model);
+            var user = await _context.AspNetUsers.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
 
-            _context.AspNetUsers.Remove(mappedUser);
+            //Soft delete - prop bool IsDeleted
+
+            _context.AspNetUsers.Remove(user);
             _context.SaveChanges();
 
-            return Result.Success(mappedUser);
+            return Result.Success(user);
         }
 
         public async Task<Result> EditAsync(UserCreateViewModel model)
         {
-            var mappedUser = _mapper.Map<IdentityUser>(model);
+            var user = await _context.AspNetUsers.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+
+            var mappedUser = _mapper.Map<IdentityUser>(user);
 
             _context.AspNetUsers.Update(mappedUser);
             _context.SaveChanges();

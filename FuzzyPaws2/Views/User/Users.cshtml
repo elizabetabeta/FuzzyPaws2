@@ -9,7 +9,7 @@
         <div class="col-6">
             <h2 class="text-primary"> 
                 <i class="bi bi-people"></i> 
-                Admin
+                List of users
             </h2>
         </div>
         <div class="col-6 text-end">
@@ -28,7 +28,7 @@
       <th scope="col">Username</th>
       <th scope="col">Email</th>
       <th scope="col">Phone Number</th>
-      
+      <th scope="col">Actions</th>
     </tr>
   </thead>
 @foreach(var user in Model.AllUsers)
@@ -39,7 +39,16 @@
       <td>@user.UserName</td>
       <td>@user.Email</td>
       <td>@user.PhoneNumber</td>
-
+      <td>
+          <a asp-controller="User" asp-action="Edit" asp-route-id="@user.Id" class="btn btn-primary"> 
+                        <i class="bi bi-person-check"></i>
+                        Edit
+                    </a>
+          <a asp-controller="User" asp-action="Delete" asp-route-id="@user.Id" class="btn btn-danger"> 
+                        <i class="bi bi-person-dash"></i>
+                        Delete
+                    </a>
+      </td>
     </tr>
   </tbody>
  }
