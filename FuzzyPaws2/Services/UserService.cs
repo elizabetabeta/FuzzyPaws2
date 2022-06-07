@@ -77,9 +77,9 @@ namespace FuzzyPaws2.Services
 
         public async Task<Result> EditAsync(UserCreateViewModel model)
         {
-            var user = await _context.AspNetUsers.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
+            //var user = await _context.AspNetUsers.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
 
-            var mappedUser = _mapper.Map<IdentityUser>(user);
+            var mappedUser = _mapper.Map<IdentityUser>(model);
 
             _context.AspNetUsers.Update(mappedUser);
             _context.SaveChanges();

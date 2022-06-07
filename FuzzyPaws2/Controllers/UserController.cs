@@ -21,22 +21,22 @@ namespace FuzzyPaws2.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Admin()
         {
-            var model = await _userService.GetAdminAsync();
-            return View(model);
+            var admin = await _userService.GetAdminAsync();
+            return View(admin);
         }
 
-        public async Task<IActionResult> Vets()
+        public async Task<IActionResult> Vet()
         {
-            var model = await _userService.GetVetAsync();
-            return View(model);
+            var vet = await _userService.GetVetAsync();
+            return View(vet);
         }
 
-        public async Task<IActionResult> Users()
+        public async Task<IActionResult> User()
         {
-            var model = await _userService.GetUserAsync();
-            return View(model);
+            var user = await _userService.GetUserAsync();
+            return View(user);
         }
 
         //GET
@@ -47,7 +47,6 @@ namespace FuzzyPaws2.Controllers
             var mappedModelUserToDelete = _mapper.Map<UserCreateViewModel>(userToDelete);
 
             return View(mappedModelUserToDelete);
-
         }
 
         //POST
@@ -58,7 +57,7 @@ namespace FuzzyPaws2.Controllers
             _userService.DeleteAsync(model);
             TempData["success"] = "User deleted successfully";
 
-            return RedirectToAction("Users");
+            return RedirectToAction("User");
         }
 
         public IActionResult DeleteVet(string id)
@@ -77,28 +76,28 @@ namespace FuzzyPaws2.Controllers
             _userService.DeleteAsync(model);
             TempData["success"] = "Vet deleted successfully";
 
-            return RedirectToAction("Vets");
+            return RedirectToAction("Vet");
         }
 
         //GET
         public IActionResult Edit(string id)
         {
-            var userToEdit = _userService.GetById(id);
+            var editUser = _userService.GetById(id);
 
-            var mappedModelUserToEdit = _mapper.Map<UserCreateViewModel>(userToEdit);
+            var mappedUserEdit = _mapper.Map<UserCreateViewModel>(editUser);
 
-            return View(mappedModelUserToEdit);
+            return View(mappedUserEdit);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(UserCreateViewModel model)
+        public IActionResult Edit(UserCreateViewModel editModel)
         {
-            _userService.EditAsync(model);
+            _userService.EditAsync(editModel);
             TempData["success"] = "User info edited successfully";
 
-            return RedirectToAction("Users");        
+            return RedirectToAction("User");        
         }
 
         public IActionResult EditVet(string id)
@@ -118,7 +117,7 @@ namespace FuzzyPaws2.Controllers
             _userService.EditAsync(model);
             TempData["success"] = "Vet info edited successfully";
 
-            return RedirectToAction("Vets");
+            return RedirectToAction("Vet");
         }
 
     }

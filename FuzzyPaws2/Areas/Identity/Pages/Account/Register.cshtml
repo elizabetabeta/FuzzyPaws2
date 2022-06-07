@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Add new user";
+    ViewData["Title"] = "New user";
 }
 
 <div class="row justify-content-center">
@@ -29,6 +29,12 @@
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
         </form>
+        <br />  
+        <div>
+        <a asp-controller="User" asp-action="User">
+            <button class="btn btn-secondary">List of Users</button>
+        </a>
+        </div>
     </div>
     @*<div class="col-md-6 col-md-offset-2">
         <section>
