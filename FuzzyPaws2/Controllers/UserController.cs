@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.ViewModels.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace FuzzyPaws2.Controllers
 {
@@ -12,15 +14,18 @@ namespace FuzzyPaws2.Controllers
         private readonly IUserService _userService;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
-        public UserController(IUserService userService, 
+        private readonly ApplicationDbContext _context;
+        public UserController(IUserService userService,
                               IMapper mapper,
                               UserManager<IdentityUser> userManager,
-                              RoleManager<IdentityRole> roleManager)
+                              RoleManager<IdentityRole> roleManager,
+                              ApplicationDbContext context)
         {
             _userService = userService;
             _mapper = mapper;
             _userManager = userManager;
             _roleManager = roleManager;
+            _context = context;
         }
 
 
@@ -99,7 +104,7 @@ namespace FuzzyPaws2.Controllers
         //GET
         public async Task<IActionResult> EditUser(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
+            var user = await _context.AspNetUsers.FirstOrDefaultAsync(x=>x.Id == id);
 
             if (user == null)
             {
@@ -117,6 +122,7 @@ namespace FuzzyPaws2.Controllers
         public async Task<IActionResult> EditUser(UserCreateViewModel model)
         {
             var user = await _userManager.FindByIdAsync(model.Id);
+
             if (user == null)
             {
                 ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
@@ -128,7 +134,11 @@ namespace FuzzyPaws2.Controllers
                 user.Email = model.Email;
                 user.PhoneNumber = model.PhoneNumber;
 
-                await _userManager.UpdateAsync(user);
+                //user = _mapper.Map<IdentityUser>(model);
+
+                _context.AspNetUsers.Update(user);
+                await _context.SaveChangesAsync();
+
                 TempData["success"] = "User edited successfully";
                 return RedirectToAction("User");
             }

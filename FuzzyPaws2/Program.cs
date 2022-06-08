@@ -9,7 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationDbContext' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));;
+    {
+        options.UseSqlServer(connectionString);
+        options.EnableSensitiveDataLogging(true);
+    });
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>()
@@ -20,6 +23,7 @@ builder.Services.AddScoped<IPetTypeService, PetTypeService>();
 builder.Services.AddScoped<IPetBreedService, PetBreedService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IMyPetService, MyPetService>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

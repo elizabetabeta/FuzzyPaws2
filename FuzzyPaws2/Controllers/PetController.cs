@@ -1,13 +1,12 @@
 ﻿using AutoMapper;
-using FuzzyPaws2.Core.Model;
-using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
-using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.Pets;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuzzyPaws2.Controllers
 {
+    //[Authorize(Roles = "ADMIN")]
     public class PetController : Controller
     {
         private readonly IMapper _mapper;
