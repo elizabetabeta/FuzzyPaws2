@@ -63,28 +63,5 @@ namespace FuzzyPaws2.Services
             return _context.AspNetUsers.FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<Result> DeleteAsync(UserCreateViewModel model)
-        {
-            var user = await _context.AspNetUsers.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-
-            //Soft delete - prop bool IsDeleted
-
-            _context.AspNetUsers.Remove(user);
-            _context.SaveChanges();
-
-            return Result.Success(user);
-        }
-
-        public async Task<Result> EditAsync(UserCreateViewModel model)
-        {
-            //var user = await _context.AspNetUsers.Where(x => x.Id == model.Id).FirstOrDefaultAsync();
-
-            var mappedUser = _mapper.Map<IdentityUser>(model);
-
-            _context.AspNetUsers.Update(mappedUser);
-            _context.SaveChanges();
-
-            return Result.Success(mappedUser);
-        }
     }
 }

@@ -11,13 +11,16 @@ namespace FuzzyPaws2.Controllers
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         public UserController(IUserService userService, 
-                              IMapper mapper, 
-                              UserManager<IdentityUser> userManager)
+                              IMapper mapper,
+                              UserManager<IdentityUser> userManager,
+                              RoleManager<IdentityRole> roleManager)
         {
             _userService = userService;
             _mapper = mapper;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
 
@@ -50,17 +53,24 @@ namespace FuzzyPaws2.Controllers
         }
 
         //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(UserCreateViewModel model)
+        public async Task<IActionResult> DeleteUser(string id)
         {
-            _userService.DeleteAsync(model);
-            TempData["success"] = "User deleted successfully";
-
-            return RedirectToAction("User");
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                await _userManager.DeleteAsync(user);
+                TempData["success"] = "User deleted successfully";
+                return RedirectToAction("User");             
+            }
         }
 
-        public IActionResult DeleteVet(string id)
+        //GET ZA VET
+        public IActionResult DeleteViewVet(string id)
         {
             var userToDelete = _userService.GetById(id);
 
@@ -69,38 +79,63 @@ namespace FuzzyPaws2.Controllers
             return View(mappedModelUserToDelete);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeleteVet(UserCreateViewModel model)
+        //POST ZA VET
+        public async Task<IActionResult> DeleteVet(string id)
         {
-            _userService.DeleteAsync(model);
-            TempData["success"] = "Vet deleted successfully";
-
-            return RedirectToAction("Vet");
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"Vet with Id = {id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                await _userManager.DeleteAsync(user);
+                TempData["success"] = "Vet deleted successfully";
+                return RedirectToAction("Vet");
+            }
         }
 
         //GET
-        public IActionResult Edit(string id)
+        public async Task<IActionResult> EditUser(string id)
         {
-            var editUser = _userService.GetById(id);
+            var user = await _userManager.FindByIdAsync(id);
 
-            var mappedUserEdit = _mapper.Map<UserCreateViewModel>(editUser);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {id} cannot be found";
+                return View("NotFound");
+            }
 
-            return View(mappedUserEdit);
+            var model = _mapper.Map<UserCreateViewModel>(user);
+
+            return View(model);
         }
 
         //POST
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(UserCreateViewModel editModel)
+        public async Task<IActionResult> EditUser(UserCreateViewModel model)
         {
-            _userService.EditAsync(editModel);
-            TempData["success"] = "User info edited successfully";
+            var user = await _userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                ViewBag.ErrorMessage = $"User with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                user.UserName = model.UserName;
+                user.Email = model.Email;
+                user.PhoneNumber = model.PhoneNumber;
 
-            return RedirectToAction("User");        
+                await _userManager.UpdateAsync(user);
+                TempData["success"] = "User edited successfully";
+                return RedirectToAction("User");
+            }
         }
 
-        public IActionResult EditVet(string id)
+        //GET ZA VET
+        public IActionResult EditViewVet(string id)
         {
             var userToEdit = _userService.GetById(id);
 
@@ -109,15 +144,25 @@ namespace FuzzyPaws2.Controllers
             return View(mappedModelUserToEdit);
         }
 
-        //POST
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditVet(UserCreateViewModel model)
+        //POST ZA VET
+        public async Task<IActionResult> EditVet(UserCreateViewModel model)
         {
-            _userService.EditAsync(model);
-            TempData["success"] = "Vet info edited successfully";
+            var vet = await _userManager.FindByIdAsync(model.Id);
+            if (vet == null)
+            {
+                ViewBag.ErrorMessage = $"Vet with Id = {model.Id} cannot be found";
+                return View("NotFound");
+            }
+            else
+            {
+                vet.UserName = model.UserName;
+                vet.Email = model.Email;
+                vet.PhoneNumber = model.PhoneNumber;
 
-            return RedirectToAction("Vet");
+                await _userManager.UpdateAsync(vet);
+                TempData["success"] = "Vet edited successfully";
+                return RedirectToAction("Vet");
+            }
         }
 
     }

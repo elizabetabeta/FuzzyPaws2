@@ -22,7 +22,7 @@
 <div class="row text-center">
 @foreach(var type in Model.AllTypesOfPets)
 {            
-    <div class="card col-4 pb-2 pt-2">
+    <div class="card col-3 pb-2 pt-2">
         <a asp-controller="PetType" asp-action="Details" asp-route-id="@type.Id">
             <img class="card-img-top" src="~/images/typee.jpg" alt="Card image cap">  
         </a>

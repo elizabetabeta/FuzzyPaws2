@@ -23,7 +23,7 @@
 <div class="row text-center">
 @foreach(var breed in Model.AllBreedsOfPets)
 {            
-    <div class="card col-4 pb-2 pt-2">
+    <div class="card col-3 pb-2 pt-2">
         <a asp-controller="PetBreed" asp-action="Details" asp-route-id="@breed.Id">
             <img class="card-img-top" src="~/images/breed.jpg" alt="Card image cap">  
         </a>

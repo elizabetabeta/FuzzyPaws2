@@ -11,8 +11,6 @@ namespace FuzzyPaws2.Interfaces
         Task<UserIndexViewModel> GetUserAsync();
         Task<UserCreateViewModel> PrepareCreateViewModelAsync();
         IdentityUser GetById(string id);
-        Task<Result> DeleteAsync(UserCreateViewModel model);
-        Task<Result> EditAsync(UserCreateViewModel model);
 
     }
 }
