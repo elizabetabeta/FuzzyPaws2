@@ -4,7 +4,9 @@ using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.MyPets;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FuzzyPaws2.Services
 {
@@ -12,18 +14,29 @@ namespace FuzzyPaws2.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public MyPetService(ApplicationDbContext context, IMapper mapper)
+        public MyPetService(ApplicationDbContext context, 
+                            IMapper mapper,
+                            UserManager<IdentityUser> userManager,
+                            IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _mapper = mapper;
+            _userManager = userManager;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<MyPetIndexViewModel> ShowMyPetsAsync()
         {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
             var model = new MyPetIndexViewModel()
             {
-                MyPets = await _context.MyPets.ToListAsync()
+                MyPets = await _context.MyPets.Where(x => x.UserId == userId).
+                OrderByDescending(x => x.Id).
+                ToListAsync()
             };
 
             return model;
@@ -60,6 +73,26 @@ namespace FuzzyPaws2.Services
             var mappedPet = _mapper.Map<MyPet>(model);
 
             _context.MyPets.Add(mappedPet);
+            _context.SaveChanges();
+
+            return Result.Success(mappedPet);
+        }
+
+        public async Task<Result> DeleteAsync(MyPetCreateViewModel model)
+        {
+            var mappedPet = _mapper.Map<MyPet>(model);
+
+            _context.MyPets.Remove(mappedPet);
+            _context.SaveChanges();
+
+            return Result.Success(mappedPet);
+        }
+
+        public async Task<Result> EditAsync(MyPetCreateViewModel model)
+        {
+            var mappedPet = _mapper.Map<MyPet>(model);
+
+            _context.MyPets.Update(mappedPet);
             _context.SaveChanges();
 
             return Result.Success(mappedPet);

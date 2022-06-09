@@ -3,10 +3,12 @@ using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.PetTypes;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuzzyPaws2.Controllers
 {
+    [Authorize]
     public class PetTypeController : Controller
     {
         private readonly ApplicationDbContext _context;

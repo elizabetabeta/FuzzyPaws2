@@ -11,6 +11,8 @@ namespace FuzzyPaws2.Interfaces
         MyPet GetById(int id);
         Task<MyPetCreateViewModel> CreateViewModelAsync();
         Task<Result> CreateAsync(MyPetCreateViewModel model);
+        Task<Result> DeleteAsync(MyPetCreateViewModel model);
+        Task<Result> EditAsync(MyPetCreateViewModel model);
 
     }
 }

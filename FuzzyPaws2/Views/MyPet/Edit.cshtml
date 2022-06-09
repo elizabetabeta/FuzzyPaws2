@@ -1,11 +1,12 @@
-﻿@model PetCreateViewModel
+﻿@model MyPetCreateViewModel
 
 <form method="post" asp-action="Edit">
     <input asp-for="Id" hidden/>
+    <input asp-for="UserId" hidden/>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
-                Edit pet description
+                Edit your pet info
             </h2>
             <hr />
         </div>
@@ -33,17 +34,15 @@
             <span asp-validation-for="Description" class="text-danger"></span>
 
         </div>
-        <div class="mb-3">
-            <label asp-for="Price"></label>
-            <input asp-for="Price" class="form-control"/>
-            <span asp-validation-for="Price" class="text-danger"></span>
 
-        </div>
         <button type="submit" class="btn btn-primary" style="width:150px">
             Update
         </button>
-        <a asp-controller="Pet" asp-action="Index" class="btn btn-secondary" style="width:250px">
-            Go back to the list of pets
+        <a asp-controller="MyPet" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary" style="color:lightgreen">
+            Cancel
+        </a>
+        <a asp-controller="MyPet" asp-action="Index" class="btn btn-secondary">
+            All your pets
         </a>
     </div>
 </form>

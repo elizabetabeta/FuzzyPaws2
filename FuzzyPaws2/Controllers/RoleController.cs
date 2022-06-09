@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using FuzzyPaws2.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FuzzyPaws2.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private readonly IMapper _mapper;

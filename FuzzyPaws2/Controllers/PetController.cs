@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FuzzyPaws2.Controllers
 {
-    //[Authorize(Roles = "ADMIN")]
+    [Authorize]
     public class PetController : Controller
     {
         private readonly IMapper _mapper;
@@ -23,9 +23,9 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
 
-
+        [Authorize(Roles = "Admin")] 
         //GET
-        public async Task<IActionResult> Create()         
+        public async Task<IActionResult> Create()
         {
             var model = await _petService.PrepareCreateViewModelAsync();
             return View(model);
@@ -48,6 +48,7 @@ namespace FuzzyPaws2.Controllers
         }
 
         //GET
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             var petToEdit = _petService.GetById(id);
@@ -68,10 +69,11 @@ namespace FuzzyPaws2.Controllers
             return RedirectToAction("Details", new
             {
                 id = model.Id
-        }); 
+            });
         }
 
         //GET
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var petToDelete = _petService.GetById(id);
@@ -100,6 +102,30 @@ namespace FuzzyPaws2.Controllers
                 return NotFound();
 
             return View(model);
+        }
+
+        //GET
+        public IActionResult Buy(int id)
+        {
+            var pet = _petService.GetById(id);
+
+            var mappedPet = _mapper.Map<PetCreateViewModel>(pet);
+
+            return View(mappedPet);
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Buy(PetCreateViewModel model)
+        {
+            _petService.EditAsync(model);
+            TempData["success"] = "Pet bought successfully!";
+
+            return RedirectToAction("Details", new
+            {
+                id = model.Id
+            });
         }
 
 

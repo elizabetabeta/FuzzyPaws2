@@ -46,6 +46,9 @@ namespace FuzzyPaws2
 
             CreateMap<UserCreateViewModel, IdentityUser>();
             CreateMap<IdentityUser, UserCreateViewModel>();
+
+            CreateMap<MyPetCreateViewModel, MyPet>();
+            CreateMap<MyPet, MyPetCreateViewModel>();
         }
     }
 }

@@ -25,14 +25,26 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Pet" asp-action="Index">Pets</a>
                         </li>
-                        <li class="nav-item">
+                        <li  class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="PetType" asp-action="Index">Types</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-controller="PetBreed" asp-action="Index">Breeds</a>
+                                    </li>
+                                </ul>
+                        <li class="nav-item ms-2">
                             <a class="nav-link text-light" asp-controller="Product" asp-action="Index">Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Home" asp-action="Contact">Contact</a>
                         </li>
-                        @*@if(User.IsInRole("ADMIN"))
-                        {*@
+                        @if(User.IsInRole("Admin"))
+                        {
                             <li  class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Administracija
@@ -50,15 +62,9 @@
                                     <li>
                                         <a class="dropdown-item" asp-controller="User" asp-action="User">Users</a>
                                     </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="PetType" asp-action="Index">Types</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="PetBreed" asp-action="Index">Breeds</a>
-                                    </li>
                                 </ul>
                          </li> 
-                        @*}*@
+                        }
                         @if(User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">

@@ -11,12 +11,17 @@
                 List of Pets <img src="~/images/cat-icon.png" style="height50px;width:50px"/>
             </h2>
         </div>
+
+        @if(User.IsInRole("Admin"))
+        {
         <div class="col-6 text-end">
             <a asp-controller="Pet" asp-action="Create" class="btn btn-primary"> 
                 <i class="bi bi-plus-circle"></i>
                 Add new pet
              </a>
         </div>
+        }
+
     </div>
 </div>
 
@@ -31,6 +36,15 @@
                 <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
                 <h5 class="card-title">@pet.Name</h5>
                 </a>
+                @if (pet.IsSold.Equals(true))
+                        {
+                            <h6 class="text text-danger">Status: @(pet.IsSold ? "Sold":"Available")</h6>
+                        }
+
+                        else{
+                           <h6 class="text text-success">Status: @(pet.IsSold ? "Sold":"Available")</h6>
+
+                        }
                
                 @*<div class="w-75 btn-group" role="group">
                         <a asp-controller="Pet" asp-action="Edit" asp-route-id="@pet.Id"

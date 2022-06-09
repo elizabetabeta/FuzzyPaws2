@@ -32,7 +32,7 @@ namespace FuzzyPaws2.Services
         {
             var model = new PetIndexViewModel()
             {
-                AllPets = await _context.Pets.ToListAsync()
+                AllPets = await _context.Pets.OrderByDescending(x => x.Id).ToListAsync()
             };
 
             return model;

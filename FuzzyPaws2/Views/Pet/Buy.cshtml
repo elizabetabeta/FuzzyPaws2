@@ -1,39 +1,44 @@
 ﻿@model PetCreateViewModel
 
-<form method="post" asp-action="Delete">
+<form method="post" asp-action="Buy">
     <input asp-for="Id" hidden/>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
-                Are you sure you want to remove this pet from the list? <i class="bi bi-emoji-frown"></i>
+                Are you sure you want to buy this pet? <br />
+                We are sure you won't regret this decision!
             </h2>
             <hr />
         </div>
         @*<div asp-validation-summary="All"></div>*@
         <div class="mb-3">
             <label asp-for="Name"></label>
-            <input asp-for="Name" disabled class="form-control"/>
+            <input asp-for="Name" readonly class="form-control"/>
         </div>
          <div class="mb-3">
             <label asp-for="PetTypeId"></label>
-            <input asp-for="PetTypeId" disabled class="form-control"/>
+            <input asp-for="PetTypeId" readonly class="form-control"/>
         </div>
         <div class="mb-3">
             <label asp-for="PetBreedId"></label>
-            <input asp-for="PetBreedId" disabled class="form-control"/>
+            <input asp-for="PetBreedId" readonly class="form-control"/>
         </div>
         <div class="mb-3">
             <label asp-for="Description"></label>
-            <input asp-for="Description" disabled class="form-control"/>  
+            <input asp-for="Description" readonly class="form-control"/>  
         </div>
+
         <div class="mb-3">
             <label asp-for="Price"></label>
-            <input asp-for="Price" disabled class="form-control"/>
+            <input asp-for="Price" readonly class="form-control"/>  
         </div>
-        <button type="submit" class="btn btn-danger" style="width:150px">
-            Delete
+
+        <input asp-for="IsSold" value="True" hidden checked="checked"/>
+
+        <button type="submit" class="btn btn-success">
+            Buy it now!
         </button>
-        <a asp-controller="Pet" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary" style="width:250px">
+        <a asp-controller="Pet" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-secondary">
             Cancel
         </a>
     </div>

@@ -1,11 +1,11 @@
-﻿@model PetCreateViewModel
+﻿@model MyPetCreateViewModel
 
 <form method="post" asp-action="Delete">
     <input asp-for="Id" hidden/>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
-                Are you sure you want to remove this pet from the list? <i class="bi bi-emoji-frown"></i>
+                Are you sure you want to remove your pet? <i class="bi bi-emoji-frown"></i>
             </h2>
             <hr />
         </div>
@@ -26,15 +26,15 @@
             <label asp-for="Description"></label>
             <input asp-for="Description" disabled class="form-control"/>  
         </div>
-        <div class="mb-3">
-            <label asp-for="Price"></label>
-            <input asp-for="Price" disabled class="form-control"/>
-        </div>
+
         <button type="submit" class="btn btn-danger" style="width:150px">
             Delete
         </button>
-        <a asp-controller="Pet" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary" style="width:250px">
+        <a asp-controller="MyPet" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary" style="color:lightgreen">
             Cancel
+        </a>
+        <a asp-controller="MyPet" asp-action="Index" class="btn btn-secondary">
+            All your pets
         </a>
     </div>
 </form>
