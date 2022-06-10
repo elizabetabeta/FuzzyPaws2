@@ -20,6 +20,7 @@ namespace FuzzyPaws2.Data
         public DbSet<IdentityUser> AspNetUsers { get; set; }
         public DbSet<IdentityRole> AspNetRoles { get; set; }
         public DbSet<MyPet> MyPets { get; set; }
+        public DbSet<Appointment> Appointments { get; set; }
 
     }
 }

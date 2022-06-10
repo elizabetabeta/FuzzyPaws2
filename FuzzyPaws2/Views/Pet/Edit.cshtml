@@ -1,6 +1,6 @@
 ﻿@model PetCreateViewModel
 
-<form method="post" asp-action="Edit">
+<form method="post" asp-action="Edit" enctype="multipart/form-data">
     <input asp-for="Id" hidden/>
     <div class="border p-3 mt-4">
         <div class="row pb-2">
@@ -15,30 +15,42 @@
             <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
+
          <div class="mb-3">
             <label asp-for="PetTypeId"></label>
             <input asp-for="PetTypeId" class="form-control"/>
             <span asp-validation-for="PetTypeId" class="text-danger"></span>
-
         </div>
+
         <div class="mb-3">
             <label asp-for="PetBreedId"></label>
             <input asp-for="PetBreedId" class="form-control"/>
             <span asp-validation-for="PetBreedId" class="text-danger"></span>
-
         </div>
+
         <div class="mb-3">
             <label asp-for="Description"></label>
             <input asp-for="Description" class="form-control"/>  
             <span asp-validation-for="Description" class="text-danger"></span>
-
         </div>
+
         <div class="mb-3">
             <label asp-for="Price"></label>
             <input asp-for="Price" class="form-control"/>
             <span asp-validation-for="Price" class="text-danger"></span>
-
         </div>
+
+
+        <div class="form-group">
+            <label asp-for="Picture" class="control-label"></label>
+            <div class="custom-file">
+                 <input asp-for="Picture" class="custom-file-input" />
+            </div>
+            <span asp-validation-for="Picture" class="text-danger"></span>
+            <img src="@FileLocation.RetriveFileFromFolder@Model.ExistingImage" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
+        </div>
+        
+        <br />
         <button type="submit" class="btn btn-primary" style="width:150px">
             Update
         </button>

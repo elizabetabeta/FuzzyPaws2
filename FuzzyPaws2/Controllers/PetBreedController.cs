@@ -14,11 +14,17 @@ namespace FuzzyPaws2.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IPetBreedService _petBreedService;
         private readonly IMapper _mapper;
-        public PetBreedController(ApplicationDbContext context, IPetBreedService petBreedService, IMapper mapper)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public PetBreedController(ApplicationDbContext context, 
+                                  IPetBreedService petBreedService, 
+                                  IMapper mapper, 
+                                  IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _petBreedService = petBreedService;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
@@ -27,6 +33,7 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
         //GET
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             var model = await _petBreedService.PrepareCreateBreedModelAsync();
@@ -45,30 +52,57 @@ namespace FuzzyPaws2.Controllers
         }
 
         //GET
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
-            var breedToEdit = _petBreedService.GetById(id);
+            var breed = _petBreedService.GetById(id);
 
-            var mappedPetToEdit = _mapper.Map<CreateBreedViewModel>(breedToEdit);
+            //var mappedPetToEdit = _mapper.Map<CreateBreedViewModel>(breedToEdit);
 
-            return View(mappedPetToEdit);
+            var model = new CreateBreedViewModel()
+            {
+                Id = breed.Id,
+                Name = breed.Name,
+                Description = breed.Description,
+                ExistingImage = breed.Image
+            };
+            return View(model);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(CreateBreedViewModel model)
+        public IActionResult Edit(int id, CreateBreedViewModel model)
         {
-            _petBreedService.EditAsync(model);
-            TempData["success"] = "Breed edited successfully";
+            //_petBreedService.EditAsync(model);
+            var breed = _petBreedService.GetById(id);
+
+            breed.Name = model.Name;
+            breed.Description = model.Description;
+
+            if (model.Picture != null)
+            {
+                if (model.ExistingImage != null)
+                {
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder, model.ExistingImage);
+                    System.IO.File.Delete(filePath);
+                }
+
+                breed.Image = ProcessUploadedFile(model);
+            }
+
+            _context.Update(breed);
+            _context.SaveChanges();
+            TempData["success"] = "Pet breed edited successfully";
 
             return RedirectToAction("Details", new
             {
                 id = model.Id
-            }); 
+            });
         }
 
         //GET
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var breedToDelete = _petBreedService.GetById(id);
@@ -97,6 +131,24 @@ namespace FuzzyPaws2.Controllers
                 return NotFound();
 
             return View(model);
+        }
+
+        private string ProcessUploadedFile(CreateBreedViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.Picture != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder);
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Picture.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }

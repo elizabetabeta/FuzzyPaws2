@@ -11,12 +11,15 @@
                 List of pet breeds <img src="~/images/cat-icon.png" style="height:50px;width:50px"/>
             </h2>
         </div>
-        <div class="col-6 text-end">
-            <a asp-controller="PetBreed" asp-action="Create" class="btn btn-primary"> 
-                <i class="bi bi-plus-circle"></i>
-                Add new pet breed
-             </a>
-        </div>
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-6 text-end">
+                <a asp-controller="PetBreed" asp-action="Create" class="btn btn-primary"> 
+                    <i class="bi bi-plus-circle"></i>
+                    Add new pet breed
+                </a>
+            </div>
+        }
     </div>
 </div>
 
@@ -25,7 +28,7 @@
 {            
     <div class="card col-3 pb-2 pt-2">
         <a asp-controller="PetBreed" asp-action="Details" asp-route-id="@breed.Id">
-            <img class="card-img-top" src="~/images/breed.jpg" alt="Card image cap">  
+            <img class="card-img-top" height="100%" width="100" style="min-height:280px" src="@FileLocation.RetriveFileFromFolder@breed.Image" asp-append-version="true" alt="Card image cap" />  
         </a>
             <div class="card-body">
                 <a asp-controller="PetBreed" asp-action="Details" asp-route-id="@breed.Id">

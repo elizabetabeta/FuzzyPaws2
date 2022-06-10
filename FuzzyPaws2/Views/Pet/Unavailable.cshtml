@@ -1,0 +1,61 @@
+﻿@model PetIndexViewModel
+@{
+    ViewData["Title"] = "Unavailable";
+}
+
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary"> 
+                Unavailable pets 
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" 
+                        asp-controller="Pet" asp-action="Index">All pets</a></li>
+                    <li><a class="dropdown-item" 
+                        asp-controller="Pet" asp-action="Available">Available pets</a></li>
+                  </ul>
+                </div>
+                <img src="~/images/cat-icon.png" style="height50px;width:50px"/>
+            </h2>
+        </div>
+
+        @if(User.IsInRole("Admin"))
+        {
+        <div class="col-6 text-end">
+            <a asp-controller="Pet" asp-action="Create" class="btn btn-primary"> 
+                <i class="bi bi-plus-circle"></i>
+                Add new pet
+             </a>
+        </div>
+        }
+
+    </div>
+</div>
+
+    <div class="row text-center">
+        @foreach (var pet in Model.AllPets)
+        {
+        @if (pet.IsSold.Equals(true))
+        {
+            <div class="card col-4 pt-2 mb-1"> @*my-1 mx-1 me-1 ms-1*@
+                <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
+                    <img class="card-img-top" height="100%" width="100" style="min-height:350px" src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Card image cap" />  
+                </a>
+                <div class="card-body">
+                    <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
+                        <h5 class="card-title">@pet.Name</h5>
+                    </a>
+
+                    <h6 class="text text-danger">Status: @(pet.IsSold ? "Sold":"Available")</h6>
+
+                </div>
+            </div>
+            }
+        }
+    </div>
+

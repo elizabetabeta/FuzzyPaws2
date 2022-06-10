@@ -26,5 +26,8 @@ namespace FuzzyPaws2.Models
 
         public DateTime CreatedTime { get; set; } = DateTime.Now;
 
+        [Required]
+        public string Image { get; set; }
+
     }
 }

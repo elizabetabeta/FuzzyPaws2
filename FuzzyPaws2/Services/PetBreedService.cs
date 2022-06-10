@@ -12,10 +12,14 @@ namespace FuzzyPaws2.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
-        public PetBreedService(ApplicationDbContext context, IMapper mapper)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public PetBreedService(ApplicationDbContext context, 
+                               IMapper mapper,
+                               IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<PetBreedIndexViewModel> GetPetBreedsAsync()
@@ -42,12 +46,19 @@ namespace FuzzyPaws2.Services
 
         public async Task<Result> CreateAsync(CreateBreedViewModel model)
         {
-            var mappedBreed = _mapper.Map<PetBreed>(model);
+            string uniqueFileName = ProcessUploadedFile(model);
 
-            _context.PetBreed.Add(mappedBreed);
+            PetBreed pet = new PetBreed
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Image = uniqueFileName
+            };
+
+            _context.PetBreed.Add(pet);
             _context.SaveChanges();
 
-            return Result.Success(mappedBreed);
+            return Result.Success(pet);
         }
 
         public async Task<Result> DeleteAsync(CreateBreedViewModel model)
@@ -77,6 +88,24 @@ namespace FuzzyPaws2.Services
             BreedDetailsViewModel breedDetailsViewModel = _mapper.Map<BreedDetailsViewModel>(breed);
 
             return breedDetailsViewModel;
+        }
+
+        private string ProcessUploadedFile(CreateBreedViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.Picture != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder);
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Picture.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }

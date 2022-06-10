@@ -16,16 +16,19 @@ namespace FuzzyPaws2.Services
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public MyPetService(ApplicationDbContext context, 
                             IMapper mapper,
                             UserManager<IdentityUser> userManager,
-                            IHttpContextAccessor httpContextAccessor)
+                            IHttpContextAccessor httpContextAccessor,
+                            IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<MyPetIndexViewModel> ShowMyPetsAsync()
@@ -70,12 +73,24 @@ namespace FuzzyPaws2.Services
         //POST ZA CREATE
         public async Task<Result> CreateAsync(MyPetCreateViewModel model)
         {
-            var mappedPet = _mapper.Map<MyPet>(model);
+            //var mappedPet = _mapper.Map<MyPet>(model);
 
-            _context.MyPets.Add(mappedPet);
+            string uniqueFileName = ProcessUploadedFile(model);
+
+            MyPet pet = new MyPet
+            {
+                Name = model.Name,
+                Description = model.Description,
+                PetTypeId = model.PetTypeId,
+                PetBreedId = model.PetBreedId,
+                UserId = model.UserId,
+                Image = uniqueFileName
+            };
+
+            _context.MyPets.Add(pet);
             _context.SaveChanges();
 
-            return Result.Success(mappedPet);
+            return Result.Success(pet);
         }
 
         public async Task<Result> DeleteAsync(MyPetCreateViewModel model)
@@ -96,6 +111,24 @@ namespace FuzzyPaws2.Services
             _context.SaveChanges();
 
             return Result.Success(mappedPet);
+        }
+
+        private string ProcessUploadedFile(MyPetCreateViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.Picture != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder);
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Picture.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
     }
 }

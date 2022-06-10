@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
+using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.Pets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,13 +13,32 @@ namespace FuzzyPaws2.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPetService _petService;
-        public PetController(IPetService petService, IMapper mapper)
+        private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public PetController(IPetService petService, 
+                             IMapper mapper,
+                             ApplicationDbContext context,
+                             IWebHostEnvironment webHostEnvironment)
         {
             _petService = petService;
             _mapper = mapper;
+            _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index()
+        {
+            var model = await _petService.GetPetsAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Available()
+        {
+            var model = await _petService.GetPetsAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Unavailable()
         {
             var model = await _petService.GetPetsAsync();
             return View(model);
@@ -36,10 +57,6 @@ namespace FuzzyPaws2.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(PetCreateViewModel model)
         {
-            //Post model
-            //Send model to _petService.CreateAsync
-            //Map PetCreateViewModel to Pet
-            //Add pet to dbContext
             _petService.CreateAsync(model);
             TempData["success"] = "Pet added successfully";
 
@@ -51,19 +68,49 @@ namespace FuzzyPaws2.Controllers
         [Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
-            var petToEdit = _petService.GetById(id);
+            var pet = _petService.GetById(id);
 
-            var mappedModelPetToEdit = _mapper.Map<PetCreateViewModel>(petToEdit);
-
-            return View(mappedModelPetToEdit);
+            //var mappedModelPetToEdit = _mapper.Map<PetCreateViewModel>(petToEdit);
+            var model = new PetCreateViewModel()
+            {
+                Id = pet.Id,
+                Name = pet.Name,
+                Description = pet.Description,
+                Price = pet.Price,
+                PetTypeId = pet.PetTypeId,
+                PetBreedId = pet.PetBreedId,
+                ExistingImage = pet.Image
+            };
+            return View(model);
         }
 
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(PetCreateViewModel model)
+        public IActionResult Edit(int id, PetCreateViewModel model)
         {
-            _petService.EditAsync(model);
+            //_petService.EditAsync(id, model);
+            var pet = _petService.GetById(id);
+
+            pet.Name = model.Name;
+            pet.Description = model.Description;
+            pet.Price = model.Price;
+            pet.PetTypeId = model.PetTypeId;
+            pet.PetBreedId = model.PetBreedId;
+
+            if (model.Picture != null)
+            {
+                if (model.ExistingImage != null)
+                {
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder, model.ExistingImage);
+                    System.IO.File.Delete(filePath);
+                }
+
+                pet.Image = ProcessUploadedFile(model);
+            }
+
+            _context.Update(pet);
+            _context.SaveChanges();
             TempData["success"] = "Pet edited successfully";
 
             return RedirectToAction("Details", new
@@ -117,15 +164,38 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Buy(PetCreateViewModel model)
+        public IActionResult Buy(int id, PetCreateViewModel model)
         {
-            _petService.EditAsync(model);
+            var pet = _petService.GetById(id);
+
+            pet.IsSold = model.IsSold;
+
+            _context.Update(pet);
+            _context.SaveChanges();
             TempData["success"] = "Pet bought successfully!";
 
             return RedirectToAction("Details", new
             {
                 id = model.Id
             });
+        }
+
+        private string ProcessUploadedFile(PetCreateViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.Picture != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder);
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Picture.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
         }
 
 

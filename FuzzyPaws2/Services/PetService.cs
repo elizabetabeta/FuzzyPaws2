@@ -12,11 +12,15 @@ namespace FuzzyPaws2.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PetService(ApplicationDbContext context, IMapper mapper)
+        public PetService(ApplicationDbContext context, 
+                          IMapper mapper,
+                          IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         //GET ZA CREATE, EDIT I DELETE VIEW 
@@ -60,12 +64,24 @@ namespace FuzzyPaws2.Services
         //POST ZA CREATE PET
         public async Task<Result> CreateAsync(PetCreateViewModel model)
         {
-            var mappedPet = _mapper.Map<Pet>(model);
+            string uniqueFileName = ProcessUploadedFile(model);
 
-            _context.Pets.Add(mappedPet);
+            Pet pet = new Pet
+            {
+                Name = model.Name,
+                Description = model.Description,
+                Price = model.Price,
+                PetTypeId = model.PetTypeId,
+                PetBreedId = model.PetBreedId,
+                Image = uniqueFileName
+            };
+
+            //var mappedPet = _mapper.Map<Pet>(model);
+
+            _context.Pets.Add(pet);
             _context.SaveChanges();
             
-            return Result.Success(mappedPet);
+            return Result.Success(pet);
         }
 
         //POST ZA DELETE PET
@@ -80,16 +96,51 @@ namespace FuzzyPaws2.Services
         }
 
         //POST ZA EDIT PET
-        public async Task<Result> EditAsync(PetCreateViewModel model)
+        public async Task<Result> EditAsync(int id, PetCreateViewModel model)
         {
-            var mappedPet = _mapper.Map<Pet>(model);
+            //var mappedPet = _mapper.Map<Pet>(model);
+            var pet = await _context.Pets.FindAsync(model.Id);
 
-            _context.Pets.Update(mappedPet);
-            _context.SaveChanges();
+            pet.Name = model.Name;
+            pet.Description = model.Description;
+            pet.Price = model.Price;
+            pet.PetTypeId = model.PetTypeId;
+            pet.PetBreedId = model.PetBreedId;
 
-            return Result.Success(mappedPet);
+            if (model.Picture != null)
+            {
+                if (model.ExistingImage != null)
+                {
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder, model.ExistingImage);
+                    System.IO.File.Delete(filePath);
+                }
+
+                pet.Image = ProcessUploadedFile(model);
+            }
+
+            _context.Update(pet);
+            await _context.SaveChangesAsync();
+
+            return Result.Success(pet);
         }
 
+        private string ProcessUploadedFile(PetCreateViewModel model)
+        {
+            string uniqueFileName = null;
+
+            if (model.Picture != null)
+            {
+                string uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, FileLocation.FileUploadFolder);
+                uniqueFileName = Guid.NewGuid().ToString() + "_" + model.Picture.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    model.Picture.CopyTo(fileStream);
+                }
+            }
+
+            return uniqueFileName;
+        }
 
     }  
     

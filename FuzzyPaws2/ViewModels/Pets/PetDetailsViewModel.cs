@@ -1,4 +1,6 @@
-﻿namespace FuzzyPaws2.ViewModels.Pets
+﻿using FuzzyPaws2.ViewModels.Images;
+
+namespace FuzzyPaws2.ViewModels.Pets
 {
     public class PetDetailsViewModel
     {
@@ -11,5 +13,6 @@
         public string PetTypeName { get; set; }
         public int PetBreedId { get; set; }
         public int PetTypeId { get; set; }
+        public string Image { get; set; }
     }
 }

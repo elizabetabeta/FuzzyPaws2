@@ -20,7 +20,7 @@
 {
     <br /><br />
     <div class="text-center">
-    <h1 class="text-primary">You don't have any pets yet, 
+    <h1 class="text-success">You don't have any pets yet, 
         <a asp-controller="MyPet" asp-action="Create">
         add</a> one now!</h1>
     <br />
@@ -34,11 +34,11 @@ else
             <div class="card mb-3 me-2" style="max-width: 500px;">
               <div class="row g-0">
                 <div class="col-md-4">
-                  <img src="~/images/maca.jpg" class="img-fluid rounded-start pt-1 pb-1 alt="...">
+                    <img class="card-img-top" height="100%" width="100" src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Card image cap" />  
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">@pet.Name</h5>
+                    <h5 class="card-title text-primary">@pet.Name</h5>
                     <p class="card-text">@pet.Description</p>
                     <p><a asp-controller="MyPet" asp-action="Details" asp-route-id="@pet.Id">
                         More about this pet

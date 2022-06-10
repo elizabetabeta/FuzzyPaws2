@@ -3,11 +3,13 @@
 <br />
 <div class="row">
     <div class="col-5">
-        <img class="w-100" src="~/images/chow.jpg" alt="Card image cap">
+        <img class="w-100" 
+        src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
+        alt="Card image cap">
             </div>
                 <div class="col">
                     <div class = "align-items-center">
-                        <h3 class="card-title">@Model.Name</h3>
+                        <h3 class="card-title text-primary">@Model.Name</h3>
                         <hr />
                         <h5 class="card-text">@Model.PetTypeName
                         <a asp-controller="PetType" asp-action="Details" asp-route-id="@Model.PetTypeId">
@@ -19,7 +21,7 @@
                         </a> </h5>
                         <br />
                         <p class="card-text">@Model.Description</p>
-                        <p>Price: @Model.Price $</p>
+                        <p>Price: @Model.Price.ToString()$</p>
                         @if (Model.IsSold.Equals(true))
                         {
                             <h6 class="text text-danger">Status: @(Model.IsSold ? "Sold":"Available")</h6>
@@ -46,10 +48,16 @@
                         Delete
                     </a>
 } &nbsp;&nbsp;&nbsp;
+@if (Model.IsSold.Equals(false))
+{
     <a asp-controller="Pet" asp-action="Buy" asp-route-id="@Model.Id" class="btn btn-success">
         Buy this pet
     </a>
-    <a asp-controller="Pet" asp-action="Index" class="btn btn-secondary" style="width:250px">
+} else
+{
+    <btn class="btn btn-danger" disabled> Not available </btn>
+}
+<a asp-controller="Pet" asp-action="Index" class="btn btn-secondary" style="width:250px">
     Go back to the list of pets
     </a>
                     

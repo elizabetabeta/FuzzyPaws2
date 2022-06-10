@@ -8,8 +8,20 @@
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary"> 
-                List of Pets <img src="~/images/cat-icon.png" style="height50px;width:50px"/>
-            </h2>
+                List of Pets 
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" 
+                        asp-controller="Pet" asp-action="Available">Available pets</a></li>
+                    <li><a class="dropdown-item" 
+                        asp-controller="Pet" asp-action="Unavailable">Unavailable pets</a></li>
+                  </ul>
+                </div>
+                <img src="~/images/cat-icon.png" style="height50px;width:50px"/>
+            </h2>    
         </div>
 
         @if(User.IsInRole("Admin"))
@@ -30,7 +42,7 @@
 {            
     <div class="card col-4 pt-2 mb-1"> @*my-1 mx-1 me-1 ms-1*@
         <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
-            <img class="card-img-top" src="~/images/chow.jpg" alt="Card image cap">  
+            <img class="card-img-top" height="100%" width="100" style="min-height:350px" src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Card image cap" />  
         </a>
             <div class="card-body">
                 <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
