@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FuzzyPaws2.Models;
+using FuzzyPaws2.ViewModels.Appointments;
 using FuzzyPaws2.ViewModels.MyPets;
 using FuzzyPaws2.ViewModels.PetBreeds;
 using FuzzyPaws2.ViewModels.Pets;
@@ -49,6 +50,9 @@ namespace FuzzyPaws2
 
             CreateMap<MyPetCreateViewModel, MyPet>();
             CreateMap<MyPet, MyPetCreateViewModel>();
+
+            CreateMap<CreateAppointmentViewModel, Appointment>();
+            CreateMap<Appointment, CreateAppointmentViewModel>();
         }
     }
 }

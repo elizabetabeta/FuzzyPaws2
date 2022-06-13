@@ -1,1 +1,116 @@
-﻿<h1>Vet Appointments</h1>
+﻿@model AppointmentsIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary"> 
+                Vet Appointments
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="Appointment" asp-action="Create" class="btn btn-primary"> 
+                Make an appointment
+             </a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-hover">
+    <thead>
+    <tr>
+      <th scope="col"></th>
+      <th scope="col">Name</th>
+      <th scope="col">Time</th>
+      <th scope="col">Description</th>
+      <th scope="col">Pet</th>
+      <th scope="col">Status</th>
+            @if (User.IsInRole("Vet"))
+            {
+                <th scope="col">Change status</th>
+            }
+    </tr>
+  </thead>
+@foreach(var appointment in Model.AllAppointments)
+    {
+        <tbody>
+        @if (appointment.status.Equals(Status.Waiting))
+        {
+            <tr style="background-color:#fff457">
+              <th scope="row"></th>
+              <td>Ime</td>
+              <td>@appointment.Time</td>
+              <td>@appointment.Description</td>
+              <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
+                  @appointment.MyPetId
+              </a></td>
+              <td>@appointment.status</td>
+              @if (User.IsInRole("Vet"))
+            {
+              <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
+                        Change status
+              </a></td>
+            }
+            </tr>
+      
+        } else if(appointment.status.Equals(Status.Confirmed)) 
+        {
+            <tr style="background-color:lightgreen">
+              <th scope="row"></th>
+              <td>Ime</td>
+              <td>@appointment.Time</td>
+              <td>@appointment.Description</td>
+              <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
+                  @appointment.MyPetId
+              </a></td>
+              <td>@appointment.status</td>
+              @if (User.IsInRole("Vet"))
+                {
+                  <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
+                            Change status
+                  </a></td>
+                }
+            </tr>
+            } else if(appointment.status.Equals(Status.Rejected))
+            {
+            <tr style="background-color:lightcoral">
+              <th scope="row"></th>
+              <td>Ime</td>
+              <td>@appointment.Time</td>
+              <td>@appointment.Description</td>
+              <td>
+                  <a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
+                  @appointment.MyPetId
+              </a>
+              </td>   
+              <td>@appointment.status</td>
+                  @if (User.IsInRole("Vet"))
+                    {
+                      <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
+                                Change status
+                      </a></td>
+                    }
+            </tr>
+            } else
+            {
+            <tr>
+              <th scope="row"></th>
+              <td>Ime</td>
+              <td>@appointment.Time</td>
+              <td>@appointment.Description</td>
+              <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
+                  @appointment.MyPetId
+              </a></td>
+              <td>@appointment.status</td>
+              @if (User.IsInRole("Vet"))
+                {
+                  <td></td>
+                }
+            </tr>
+            }
+        </tbody>
+ }
+ </table>

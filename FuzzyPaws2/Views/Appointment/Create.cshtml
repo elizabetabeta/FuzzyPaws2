@@ -1,0 +1,51 @@
+﻿@model CreateAppointmentViewModel
+
+<form asp-action="Create" method="post">
+@*    <input asp-for="Id" hidden/> *@    
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">
+                Book an appointment
+            </h2>
+            <hr />
+        </div>
+        @*<div asp-validation-summary="All"></div>*@
+        <div class="mb-3">
+          <label asp-for="Time"></label> <br />
+          <input asp-for="Time" type="datetime-local" value="DateTime.Now">
+          <span asp-validation-for="Time" class="text-danger"></span>        
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Description"></label>
+            <input asp-for="Description" class="form-control"/>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="MyPetId"></label>
+            <input asp-for="MyPetId" class="form-control"/>
+            <span asp-validation-for="MyPetId" class="text-danger"></span>
+        </div>
+
+        @*<div class="mb-3">
+            <label asp-for="status"></label>
+            <select asp-for="status" asp-items="Html.GetEnumSelectList<Status>()">
+                <option asp-for="status" selected="selected" value="">Please select </option>
+             </select>
+        </div>*@
+
+        <button type="submit" class="btn btn-primary" style="width:150px">
+            Create
+        </button>
+        <a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary">
+            Cancel
+        </a>
+    </div>
+</form>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" /> 
+    }
+}
+
