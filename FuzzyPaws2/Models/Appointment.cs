@@ -12,7 +12,8 @@ namespace FuzzyPaws2.Models
         public DateTime Time { get; set; }
         [Required]
         public string Description { get; set; }
-        public int Price { get; set; }
+        public int ExpectedPrice { get; set; }
+        public int FinalPrice { get; set; }
 
         public Status status { get; set; }
 

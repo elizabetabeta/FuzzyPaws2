@@ -33,12 +33,23 @@
              </select>
         </div>
 
+        <div class="mb-3">
+            <label asp-for="ExpectedPrice"></label>
+            <input asp-for="ExpectedPrice" class="form-control"/>  
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="FinalPrice"></label>
+            <input asp-for="FinalPrice" class="form-control"/>  
+        </div>
+
         <button type="submit" class="btn btn-primary" style="width:150px">
             Update
         </button>
         <a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary">
             Cancel
         </a>
+
     </div>
 </form>
 @section Scripts{

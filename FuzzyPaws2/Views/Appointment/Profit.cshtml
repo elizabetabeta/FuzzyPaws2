@@ -1,0 +1,27 @@
+﻿@model AppointmentsIndexViewModel
+
+
+<h1 class = "text-success">
+    All-time profit: @(Model.AllAppointments.Where(x => x.FinalPrice > 0).Sum(b => b.FinalPrice))$
+</h1>
+<br />
+@*<p>    
+    Profit in July: @(Model.AllAppointments.Where(x => x.Time.Month == 7).Sum(b => b.FinalPrice))$
+</p>
+
+<p>    
+    Profit in June: @(Model.AllAppointments.Where(x => x.Time.Month == 6).Sum(b => b.FinalPrice))$
+</p>
+*@
+<h3> Profit by Months: </h3>
+
+
+@{
+    int i = 1;
+}
+@while( i < 13){
+    <h6 class="text-success">
+        Month @(i): @(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))$
+    </h6>
+        i++;
+    }
