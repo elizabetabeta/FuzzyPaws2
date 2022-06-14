@@ -13,12 +13,15 @@ namespace FuzzyPaws2.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ISelectListService _selectListService;
 
         public AppointmentService(ApplicationDbContext context,
-                                  IMapper mapper)
+                                  IMapper mapper,
+                                  ISelectListService selectListService)
         {
             _context = context;
             _mapper = mapper;
+            _selectListService = selectListService;
         }
 
         public Appointment GetById(int id)
@@ -39,6 +42,7 @@ namespace FuzzyPaws2.Services
         public async Task<CreateAppointmentViewModel> MakeAnAppointmentAsync()
         {
             var model = new CreateAppointmentViewModel();
+            model.MyPets = await _selectListService.GetMyPets(true, "Choose your pet");
 
             return model;
         }

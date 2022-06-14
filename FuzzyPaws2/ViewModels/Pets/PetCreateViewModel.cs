@@ -13,6 +13,7 @@ namespace FuzzyPaws2.ViewModels.Pets
         public int PetBreedId { get; set; }
         public int PetTypeId { get; set; }
         public IEnumerable<SelectListItem> PetTypes { get; set; }
+        public IEnumerable<SelectListItem> PetBreeds { get; set; }
     }
 }
 

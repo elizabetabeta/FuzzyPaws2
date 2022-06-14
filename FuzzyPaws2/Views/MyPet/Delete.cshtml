@@ -14,14 +14,17 @@
             <label asp-for="Name"></label>
             <input asp-for="Name" disabled class="form-control"/>
         </div>
-         <div class="mb-3">
-            <label asp-for="PetTypeId"></label>
-            <input asp-for="PetTypeId" disabled class="form-control"/>
-        </div>
+
         <div class="mb-3">
-            <label asp-for="PetBreedId"></label>
-            <input asp-for="PetBreedId" disabled class="form-control"/>
+            <label>Pet Type</label>
+            <select asp-for="PetTypeId" asp-items="Model.PetTypes" disabled class="form-control"></select>
         </div>
+
+        <div class="mb-3">
+            <label>Pet Breed</label>
+            <select asp-for="PetBreedId" asp-items="Model.PetBreeds" disabled class="form-control"></select>
+        </div>
+
         <div class="mb-3">
             <label asp-for="Description"></label>
             <input asp-for="Description" disabled class="form-control"/>  

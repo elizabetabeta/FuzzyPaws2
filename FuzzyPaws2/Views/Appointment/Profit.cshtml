@@ -1,5 +1,13 @@
 ﻿@model AppointmentsIndexViewModel
+@{
+    string getMonthName(int monthNr)
+    {
+        if (monthNr == 1)
+            return "January";
 
+        return "";
+    }
+}
 
 <h1 class = "text-success">
     All-time profit: @(Model.AllAppointments.Where(x => x.FinalPrice > 0).Sum(b => b.FinalPrice))$
@@ -21,7 +29,7 @@
 }
 @while( i < 13){
     <h6 class="text-success">
-        Month @(i): @(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))$
+        Month @(getMonthName(i)): @(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))$
     </h6>
         i++;
     }

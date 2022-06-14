@@ -1,6 +1,7 @@
 ﻿using Ardalis.GuardClauses;
 using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +17,7 @@ namespace FuzzyPaws2.Services
 
         public async Task<IEnumerable<SelectListItem>> GetPetTypes(bool addOptionLabel = true, string optionLabelText = null)
         {
-            var vehicleBrands = (await _context.PetType
+            var petTypes = (await _context.PetType
                         .OrderBy(s => s.Name)
                         .ToListAsync())
               .Select(c => new SelectListItem
@@ -28,10 +29,10 @@ namespace FuzzyPaws2.Services
 
             if (addOptionLabel)
             {
-                AddOptionLabel(vehicleBrands, optionLabelText);
+                AddOptionLabel(petTypes, optionLabelText);
             }
 
-            return vehicleBrands;
+            return petTypes;
         }
 
         IEnumerable<SelectListItem> ISelectListService.GetEnumNameList<TEnum>(bool addOptionLabel, string optionLabelText)
@@ -57,5 +58,47 @@ namespace FuzzyPaws2.Services
         }
 
         #endregion Internals
+
+        public async Task<IEnumerable<SelectListItem>> GetPetBreeds(bool addOptionLabel = true, string optionLabelText = null)
+        {
+            var petBreeds = (await _context.PetBreed
+                        .OrderBy(s => s.Name)
+                        .ToListAsync())
+              .Select(c => new SelectListItem
+              {
+                  Text = c.Name,
+                  Value = c.Id.ToString()
+              })
+              .ToList();
+
+            if (addOptionLabel)
+            {
+                AddOptionLabel(petBreeds, optionLabelText);
+            }
+
+            return petBreeds;
+        }
+
+        public async Task<IEnumerable<SelectListItem>> GetMyPets(bool addOptionLabel = true, string optionLabelText = null)
+        {
+
+            var myPets = (await _context.MyPets
+                        .OrderBy(s => s.Name)
+                        .ToListAsync())
+              .Select(c => new SelectListItem
+              {
+                  Text = c.Name,
+                  Value = c.Id.ToString()
+              })
+              .ToList();
+
+            if (addOptionLabel)
+            {
+                AddOptionLabel(myPets, optionLabelText);
+            }
+
+            return myPets;
+
+        }
     }
 }

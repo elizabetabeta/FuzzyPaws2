@@ -30,7 +30,8 @@ namespace FuzzyPaws2.Services
         public async Task<PetCreateViewModel> PrepareCreateViewModelAsync()
         {
             var model = new PetCreateViewModel();
-            model.PetTypes = await _selectListService.GetPetTypes(true, "Izaberi tip ljubimca");
+            model.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+            model.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet breed");
 
             return model;
         }

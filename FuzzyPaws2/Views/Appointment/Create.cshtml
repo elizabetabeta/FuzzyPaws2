@@ -1,4 +1,8 @@
-﻿@model CreateAppointmentViewModel
+﻿@using Microsoft.AspNetCore.Identity;
+
+@inject UserManager<IdentityUser> UserManager
+
+@model CreateAppointmentViewModel
 
 <form asp-action="Create" method="post">
 @*    <input asp-for="Id" hidden/> *@    
@@ -23,8 +27,8 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="MyPetId"></label>
-            <input asp-for="MyPetId" class="form-control"/>
+            <label>Add your pet</label>
+            <select asp-for="MyPetId" asp-items="Model.MyPets" class="form-control"></select>
             <span asp-validation-for="MyPetId" class="text-danger"></span>
         </div>
 
@@ -45,7 +49,7 @@
 </form>
 @section Scripts{
     @{
-        <partial name="_ValidationScriptsPartial" /> 
+    <partial name="_ValidationScriptsPartial" /> 
     }
 }
 

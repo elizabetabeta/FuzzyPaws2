@@ -2,9 +2,11 @@
 using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
+using FuzzyPaws2.ViewModels.MyPets;
 using FuzzyPaws2.ViewModels.Pets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FuzzyPaws2.Controllers
 {
@@ -13,17 +15,23 @@ namespace FuzzyPaws2.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPetService _petService;
+        private readonly IMyPetService _myPetService;
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public PetController(IPetService petService, 
+        private readonly ISelectListService _selectListService;
+        public PetController(IPetService petService,
                              IMapper mapper,
                              ApplicationDbContext context,
-                             IWebHostEnvironment webHostEnvironment)
+                             IWebHostEnvironment webHostEnvironment,
+                             ISelectListService selectListService,
+                             IMyPetService myPetService)
         {
             _petService = petService;
             _mapper = mapper;
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _selectListService = selectListService;
+            _myPetService = myPetService;
         }
 
         public async Task<IActionResult> Index()
@@ -66,7 +74,7 @@ namespace FuzzyPaws2.Controllers
 
         //GET
         [Authorize(Roles = "Admin")]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
             var pet = _petService.GetById(id);
 
@@ -81,6 +89,10 @@ namespace FuzzyPaws2.Controllers
                 PetBreedId = pet.PetBreedId,
                 ExistingImage = pet.Image
             };
+
+            model.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+            model.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet type");
+
             return View(model);
         }
 
@@ -121,11 +133,14 @@ namespace FuzzyPaws2.Controllers
 
         //GET
         [Authorize(Roles = "Admin")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             var petToDelete = _petService.GetById(id);
 
             var mappedModelPetToDelete = _mapper.Map<PetCreateViewModel>(petToDelete);
+
+            mappedModelPetToDelete.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+            mappedModelPetToDelete.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet type");
 
             return View(mappedModelPetToDelete);
 
@@ -152,11 +167,14 @@ namespace FuzzyPaws2.Controllers
         }
 
         //GET
-        public IActionResult Buy(int id)
+        public async Task<IActionResult> Buy(int id)
         {
             var pet = _petService.GetById(id);
 
             var mappedPet = _mapper.Map<PetCreateViewModel>(pet);
+
+            mappedPet.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+            mappedPet.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet type");
 
             return View(mappedPet);
         }
@@ -164,15 +182,21 @@ namespace FuzzyPaws2.Controllers
         //POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Buy(int id, PetCreateViewModel model)
+        public IActionResult Buy(int id, PetCreateViewModel model, MyPetCreateViewModel myPet)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var pet = _petService.GetById(id);
-
             pet.IsSold = model.IsSold;
-
             _context.Update(pet);
+
+            myPet.UserId = userId;
+            _myPetService.CreateAsync(myPet);
+
+            //Add pet to my pets
+
             _context.SaveChanges();
-            TempData["success"] = "Pet bought successfully!";
+            TempData["success"] = "Pet bought and added to your pets successfully!";
 
             return RedirectToAction("Details", new
             {

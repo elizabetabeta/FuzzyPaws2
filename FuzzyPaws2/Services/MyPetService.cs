@@ -17,18 +17,20 @@ namespace FuzzyPaws2.Services
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IWebHostEnvironment _webHostEnvironment;
-
-        public MyPetService(ApplicationDbContext context, 
+        private readonly ISelectListService _selectListService;
+        public MyPetService(ApplicationDbContext context,
                             IMapper mapper,
                             UserManager<IdentityUser> userManager,
                             IHttpContextAccessor httpContextAccessor,
-                            IWebHostEnvironment webHostEnvironment)
+                            IWebHostEnvironment webHostEnvironment,
+                            ISelectListService selectListService)
         {
             _context = context;
             _mapper = mapper;
             _userManager = userManager;
             _httpContextAccessor = httpContextAccessor;
             _webHostEnvironment = webHostEnvironment;
+            _selectListService = selectListService;
         }
 
         public async Task<MyPetIndexViewModel> ShowMyPetsAsync()
@@ -66,6 +68,8 @@ namespace FuzzyPaws2.Services
         public async Task<MyPetCreateViewModel> CreateViewModelAsync()
         {
             var model = new MyPetCreateViewModel();
+            model.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+            model.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet breed");
 
             return model;
         }

@@ -40,6 +40,7 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var model = await _appointmentService.MakeAnAppointmentAsync();
@@ -54,6 +55,7 @@ namespace FuzzyPaws2.Controllers
             if (day < DateTime.Now)
             {
                 TempData["error"] = "You can't choose past date. Please select a valid time.";
+                return RedirectToAction("Create");
             }
             else if (_context.Appointments.Any(x => x.Time == model.Time))
             {

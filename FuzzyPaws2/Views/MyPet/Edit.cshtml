@@ -16,18 +16,19 @@
             <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
-         <div class="mb-3">
-            <label asp-for="PetTypeId"></label>
-            <input asp-for="PetTypeId" class="form-control"/>
-            <span asp-validation-for="PetTypeId" class="text-danger"></span>
-
-        </div>
+         
         <div class="mb-3">
-            <label asp-for="PetBreedId"></label>
-            <input asp-for="PetBreedId" class="form-control"/>
-            <span asp-validation-for="PetBreedId" class="text-danger"></span>
-
+            <label>Pet Type</label>
+            <select asp-for="PetTypeId" asp-items="Model.PetTypes" class="form-control"></select>
+            <span asp-validation-for="PetTypeId" class="text-danger"></span>
         </div>
+
+        <div class="mb-3">
+            <label>Pet Breed</label>
+            <select asp-for="PetBreedId" asp-items="Model.PetBreeds" class="form-control"></select>
+            <span asp-validation-for="PetBreedId" class="text-danger"></span>
+        </div>
+
         <div class="mb-3">
             <label asp-for="Description"></label>
             <input asp-for="Description" class="form-control"/>  

@@ -1,4 +1,5 @@
 ﻿using FuzzyPaws2.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FuzzyPaws2.ViewModels.Appointments
 {
@@ -11,5 +12,7 @@ namespace FuzzyPaws2.ViewModels.Appointments
         public int FinalPrice { get; set; }
         public int MyPetId { get; set; }
         public Status status { get; set; }
+        public IEnumerable<SelectListItem> MyPets { get; set; }
+
     }
 }

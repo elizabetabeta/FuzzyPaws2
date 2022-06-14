@@ -16,12 +16,12 @@
             <input asp-for="Name" readonly class="form-control"/>
         </div>
          <div class="mb-3">
-            <label asp-for="PetTypeId"></label>
-            <input asp-for="PetTypeId" readonly class="form-control"/>
+            <label>Pet Type</label>
+            <select asp-for="PetTypeId" asp-items="Model.PetTypes" disabled class="form-control"></select>
         </div>
         <div class="mb-3">
-            <label asp-for="PetBreedId"></label>
-            <input asp-for="PetBreedId" readonly class="form-control"/>
+            <label>Pet Breed</label>
+            <select asp-for="PetBreedId" asp-items="Model.PetBreeds" disabled class="form-control"></select>
         </div>
         <div class="mb-3">
             <label asp-for="Description"></label>

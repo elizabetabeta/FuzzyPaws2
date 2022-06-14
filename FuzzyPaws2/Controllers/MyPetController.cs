@@ -6,6 +6,7 @@ using FuzzyPaws2.ViewModels.MyPets;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FuzzyPaws2.Controllers
 {
@@ -17,18 +18,20 @@ namespace FuzzyPaws2.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ApplicationDbContext _context;
-
-        public MyPetController(IMyPetService myPetService, 
+        private readonly ISelectListService _selectListService;
+        public MyPetController(IMyPetService myPetService,
                                IMapper mapper,
                                UserManager<IdentityUser> userManager,
                                ApplicationDbContext context,
-                               IWebHostEnvironment webHostEnvironment)
+                               IWebHostEnvironment webHostEnvironment,
+                               ISelectListService selectListService)
         {
             _myPetService = myPetService;
             _mapper = mapper;
             _userManager = userManager;
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _selectListService = selectListService;
         }
 
         public async Task<IActionResult> Index()
@@ -66,20 +69,31 @@ namespace FuzzyPaws2.Controllers
         }
 
         //GET
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var pet = _myPetService.GetById(id);
 
-            var model = new MyPetCreateViewModel()
-            {
-                Id = pet.Id,
-                Name = pet.Name,
-                Description = pet.Description,
-                PetTypeId = pet.PetTypeId,
-                PetBreedId = pet.PetBreedId,
-                ExistingImage = pet.Image
-            };
-            return View(model);
+            if (userId == pet.UserId){
+                var model = new MyPetCreateViewModel()
+                {
+                    Id = pet.Id,
+                    Name = pet.Name,
+                    Description = pet.Description,
+                    PetTypeId = pet.PetTypeId,
+                    PetBreedId = pet.PetBreedId,
+                    ExistingImage = pet.Image
+                };
+
+                model.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+                model.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet type");
+
+                return View(model);
+            }
+
+            TempData["error"] = "This pet does not belong to you! You cannot edit its info!";
+            return RedirectToAction("Index");
         }
 
         //POST
@@ -117,13 +131,24 @@ namespace FuzzyPaws2.Controllers
         }
 
         //GET
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             var petToDelete = _myPetService.GetById(id);
 
-            var mappedModelPetToDelete = _mapper.Map<MyPetCreateViewModel>(petToDelete);
+            if (userId == petToDelete.UserId)
+            {
+                var mappedModelPetToDelete = _mapper.Map<MyPetCreateViewModel>(petToDelete);
 
-            return View(mappedModelPetToDelete);
+                mappedModelPetToDelete.PetTypes = await _selectListService.GetPetTypes(true, "Choose the pet type");
+                mappedModelPetToDelete.PetBreeds = await _selectListService.GetPetBreeds(true, "Choose the pet type");
+
+                return View(mappedModelPetToDelete);
+            }
+
+            TempData["error"] = "This pet does not belong to you! You cannot delete it!";
+            return RedirectToAction("Index");
 
         }
 

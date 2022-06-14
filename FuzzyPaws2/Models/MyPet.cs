@@ -27,8 +27,7 @@ namespace FuzzyPaws2.Models
         public IdentityUser AspNetUsers { get; set; }
 
         public DateTime CreatedTime { get; set; } = DateTime.Now;
-        [Required]
-        public string Image { get; set; }
+        public string? Image { get; set; }
 
     }
 }
