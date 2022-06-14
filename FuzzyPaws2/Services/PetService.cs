@@ -13,20 +13,24 @@ namespace FuzzyPaws2.Services
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly ISelectListService _selectListService;
 
-        public PetService(ApplicationDbContext context, 
+        public PetService(ApplicationDbContext context,
                           IMapper mapper,
-                          IWebHostEnvironment webHostEnvironment)
+                          IWebHostEnvironment webHostEnvironment, 
+                          ISelectListService selectListService)
         {
             _context = context;
             _mapper = mapper;
             _webHostEnvironment = webHostEnvironment;
+            _selectListService = selectListService;
         }
 
         //GET ZA CREATE, EDIT I DELETE VIEW 
         public async Task<PetCreateViewModel> PrepareCreateViewModelAsync()
         {
             var model = new PetCreateViewModel();
+            model.PetTypes = await _selectListService.GetPetTypes(true, "Izaberi tip ljubimca");
 
             return model;
         }

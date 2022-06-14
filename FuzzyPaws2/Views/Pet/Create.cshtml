@@ -17,7 +17,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="PetTypeId"></label>
-            <input asp-for="PetTypeId" class="form-control"/>
+            <select asp-for="PetTypeId" asp-items="Model.PetTypes" class="form-control"></select>
             <span asp-validation-for="PetTypeId" class="text-danger"></span>
 
         </div>

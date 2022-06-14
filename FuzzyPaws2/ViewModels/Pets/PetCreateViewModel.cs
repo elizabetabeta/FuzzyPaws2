@@ -1,4 +1,5 @@
 ﻿using FuzzyPaws2.ViewModels.Images;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FuzzyPaws2.ViewModels.Pets
 {
@@ -11,6 +12,7 @@ namespace FuzzyPaws2.ViewModels.Pets
         public bool IsSold { get; set; }
         public int PetBreedId { get; set; }
         public int PetTypeId { get; set; }
+        public IEnumerable<SelectListItem> PetTypes { get; set; }
     }
 }
 
