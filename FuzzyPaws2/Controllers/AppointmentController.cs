@@ -28,6 +28,18 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> WaitingAppointments()
+        {
+            var model = await _appointmentService.GetAppointmentsAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Profit()
+        {
+            var model = await _appointmentService.GetAppointmentsAsync();
+            return View(model);
+        }
+
         public async Task<IActionResult> Create()
         {
             var model = await _appointmentService.MakeAnAppointmentAsync();
@@ -50,7 +62,7 @@ namespace FuzzyPaws2.Controllers
             else if (day.DayOfWeek == DayOfWeek.Sunday || day.DayOfWeek == DayOfWeek.Saturday)
             {
                 TempData["error"] = "Invalid date. Cannot select Saturday or Sunday.";
-            } else if (day.Hour < 8 || day.Hour > 16)
+            } else if (day.Hour < 8 || day.Hour > 15)
             {
                 TempData["error"] = "Invalid time. Working hour starts at 8AM and ends at 4PM.";
             }
@@ -84,7 +96,9 @@ namespace FuzzyPaws2.Controllers
             var app = _appointmentService.GetById(id);
 
             app.status = model.status;
- 
+            app.ExpectedPrice = model.ExpectedPrice;
+            app.FinalPrice = model.FinalPrice;
+
             _context.Update(app);
             _context.SaveChanges();
 

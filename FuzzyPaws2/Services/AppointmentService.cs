@@ -66,5 +66,6 @@ namespace FuzzyPaws2.Services
 
             return Result.Success(mappedApp);
         }
+
     }
 }

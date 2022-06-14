@@ -9,12 +9,35 @@
         <div class="col-6">
             <h2 class="text-primary"> 
                 Vet Appointments
+                @if(User.IsInRole("Vet")){
+                <div class="btn-group">
+                  <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    <span class="visually-hidden">Toggle Dropdown</span>
+                  </button>
+                  <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" 
+                        asp-controller="Appointment" asp-action="WaitingAppointments">
+                         Waiting
+                    </a></li>
+                  </ul>
+                </div>
+                }
             </h2>
         </div>
         <div class="col-6 text-end">
             <a asp-controller="Appointment" asp-action="Create" class="btn btn-primary"> 
                 Make an appointment
              </a>
+            
+            @if (User.IsInRole("Vet"))
+            {
+                <h3>
+                    <a asp-controller="Appointment" asp-action="Profit" class = "text-success">
+                    Profit: @(Model.AllAppointments.Where(x => x.FinalPrice > 0).Sum(b => b.FinalPrice))$
+                    </a>
+                </h3>
+            }
+
         </div>
     </div>
 </div>
@@ -23,13 +46,14 @@
     <thead>
     <tr>
       <th scope="col"></th>
-      <th scope="col">Name</th>
       <th scope="col">Time</th>
       <th scope="col">Description</th>
       <th scope="col">Pet</th>
       <th scope="col">Status</th>
             @if (User.IsInRole("Vet"))
             {
+                <th scope="col">Expected Price</th>
+                <th scope="col">Final Price</th>
                 <th scope="col">Change status</th>
             }
     </tr>
@@ -41,7 +65,6 @@
         {
             <tr style="background-color:#fff457">
               <th scope="row"></th>
-              <td>Ime</td>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
               <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
@@ -50,6 +73,8 @@
               <td>@appointment.status</td>
               @if (User.IsInRole("Vet"))
             {
+              <td>@(appointment.ExpectedPrice)$</td>
+              <td></td>
               <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
                         Change status
               </a></td>
@@ -60,7 +85,6 @@
         {
             <tr style="background-color:lightgreen">
               <th scope="row"></th>
-              <td>Ime</td>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
               <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
@@ -69,16 +93,19 @@
               <td>@appointment.status</td>
               @if (User.IsInRole("Vet"))
                 {
-                  <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
+                  <td>@(appointment.ExpectedPrice)$</td>
+                  <td></td>
+                  <td>
+                      <a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
                             Change status
-                  </a></td>
+                      </a>
+                  </td>
                 }
             </tr>
             } else if(appointment.status.Equals(Status.Rejected))
             {
             <tr style="background-color:lightcoral">
               <th scope="row"></th>
-              <td>Ime</td>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
               <td>
@@ -89,6 +116,8 @@
               <td>@appointment.status</td>
                   @if (User.IsInRole("Vet"))
                     {
+                      <td>@(appointment.ExpectedPrice)$</td>
+                      <td></td>
                       <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
                                 Change status
                       </a></td>
@@ -98,16 +127,20 @@
             {
             <tr>
               <th scope="row"></th>
-              <td>Ime</td>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
               <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
                   @appointment.MyPetId
-              </a></td>
+                  </a>
+              </td>
               <td>@appointment.status</td>
               @if (User.IsInRole("Vet"))
                 {
-                  <td></td>
+                  <td>@(appointment.ExpectedPrice)$</td>
+                  <td>@(appointment.FinalPrice)$</td>
+                  <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
+                                Add price
+                  </a></td>
                 }
             </tr>
             }
