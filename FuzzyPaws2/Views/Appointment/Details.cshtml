@@ -1,0 +1,86 @@
+﻿@model AppointmentDetailsViewModel
+
+<br />
+<div class="row">
+    <div class="col-3">
+        <img
+        src="@FileLocation.RetriveFileFromFolder@Model.MyPetImage" class="img-thumbnail"  asp-append-version="true"
+        alt="No image"
+        >
+    </div>
+                <div class="col">
+                    <div class = "align-items-center">
+                    @if (@Model.status.Equals(Status.Waiting))
+                    {
+                        <h3 class="card-text text-warning">
+                            Status: @Model.status
+                        </h3>
+                    } 
+                    else if (@Model.status.Equals(Status.Confirmed))
+                    {
+                        <h3 class="card-text text-success">
+                            Status: @Model.status
+                        </h3>
+                    }
+                    else if (@Model.status.Equals(Status.Rejected))
+                    {
+                        <h3 class="card-text text-danger">
+                            Status: @Model.status
+                        </h3>
+                    }
+                    else
+                    {
+                        <h3 class="card-text text-secondary">
+                            Status: @Model.status
+                        </h3>
+                    }
+                        <h5 class="card-text">@Model.MyPetName <br />
+                            <a asp-controller="MyPet" asp-action="Details" asp-route-id="@Model.MyPetId">
+                            Check out this pet!
+                            </a> 
+                        </h5>
+                        <br />
+                        <h5 class="card-text">
+                            Description of the issue: <br />
+                            <p>@Model.Description</p>
+                        </h5>
+                        <br />
+                        <h5 class="card-text">
+                            Scheduled time for the appointment: <br />
+                            @Model.Time
+                        </h5>
+                        <br />
+                        @if(User.IsInRole("Vet")){
+                            @if(@Model.status != Status.Rejected){
+                            <p class="card-text">Expected price: @Model.ExpectedPrice</p>
+                            }
+                            @if(@Model.FinalPrice != 0)
+                            {
+                                <p class="card-text text-success">Final Price: @Model.FinalPrice</p>
+                            }
+
+                            <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@Model.Id" class="btn btn-light mx-2">
+                                   Change status and/or price
+                            </a></td>
+                        }
+                    </div>
+                </div>  
+</div>
+
+ <br />
+
+@*@if (User.IsInRole("Admin"))
+{
+    <a asp-controller="Pet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">
+        <i class="bi bi-pen"></i>
+        Edit
+    </a>
+    <a asp-controller="Pet" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"> 
+        <i class="bi bi-trash3"></i>
+                        Delete
+                    </a>
+}*@
+<a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary" style="width:250px">
+    All appointments
+</a>
+                    

@@ -11,5 +11,7 @@ namespace FuzzyPaws2.Interfaces
         Task<Result> CreateAsync(CreateAppointmentViewModel model);
         Task<Result> EditAsync(int id, CreateAppointmentViewModel model);
         Appointment GetById(int id);
+        Task<AppointmentDetailsViewModel> GetAppointmentsById(int appId);
+
     }
 }

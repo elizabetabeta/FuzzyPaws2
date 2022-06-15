@@ -4,15 +4,22 @@ using FuzzyPaws2.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace FuzzyPaws2.Services
 {
     public class SelectListService : ISelectListService
     {
         private readonly ApplicationDbContext _context;
-        public SelectListService(ApplicationDbContext context)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public SelectListService(ApplicationDbContext context, 
+                                 IWebHostEnvironment webHostEnvironment,
+                                 IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<SelectListItem>> GetPetTypes(bool addOptionLabel = true, string optionLabelText = null)
@@ -81,8 +88,10 @@ namespace FuzzyPaws2.Services
 
         public async Task<IEnumerable<SelectListItem>> GetMyPets(bool addOptionLabel = true, string optionLabelText = null)
         {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
             var myPets = (await _context.MyPets
+                        .Where(x => x.UserId == userId)
                         .OrderBy(s => s.Name)
                         .ToListAsync())
               .Select(c => new SelectListItem

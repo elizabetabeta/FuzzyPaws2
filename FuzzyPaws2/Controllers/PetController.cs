@@ -190,11 +190,17 @@ namespace FuzzyPaws2.Controllers
             pet.IsSold = model.IsSold;
             _context.Update(pet);
 
-            myPet.UserId = userId;
-            _myPetService.CreateAsync(myPet);
+            var newMyPet = new MyPet()
+            {
+                Name = pet.Name,
+                Description = pet.Description,
+                PetTypeId = pet.PetTypeId,
+                PetBreedId = pet.PetBreedId,
+                UserId = userId,
+        };
 
             //Add pet to my pets
-
+            _context.MyPets.Add(newMyPet);
             _context.SaveChanges();
             TempData["success"] = "Pet bought and added to your pets successfully!";
 

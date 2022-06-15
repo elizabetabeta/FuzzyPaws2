@@ -29,6 +29,11 @@ namespace FuzzyPaws2
                 .ForMember(dest => dest.PetTypeId, src => src.MapFrom(x => x.PetType.Id))
                 .ForMember(dest => dest.UserId, src => src.MapFrom(x => x.AspNetUsers.Id))
                 ;
+            CreateMap<Appointment, AppointmentDetailsViewModel>()
+                .ForMember(dest => dest.MyPetName, src => src.MapFrom(x => x.MyPets.Name))
+                .ForMember(dest => dest.MyPetImage, src => src.MapFrom(x => x.MyPets.Image))
+                .ForMember(dest => dest.MyPetId, src => src.MapFrom(x => x.MyPets.Id))
+                ;
 
             CreateMap<PetCreateViewModel, Pet>();
             CreateMap<Pet, PetCreateViewModel>();

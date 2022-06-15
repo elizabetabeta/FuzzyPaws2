@@ -48,7 +48,7 @@
       <th scope="col"></th>
       <th scope="col">Time</th>
       <th scope="col">Description</th>
-      <th scope="col">Pet</th>
+      <th scope="col">Details</th>
       <th scope="col">Status</th>
             @if (User.IsInRole("Vet"))
             {
@@ -67,8 +67,8 @@
               <th scope="row"></th>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
-              <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
-                  @appointment.MyPetId
+              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
+                  <i class="bi bi-three-dots"></i>
               </a></td>
               <td>@appointment.status</td>
               @if (User.IsInRole("Vet"))
@@ -87,8 +87,8 @@
               <th scope="row"></th>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
-              <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
-                  @appointment.MyPetId
+              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
+                  <i class="bi bi-three-dots"></i>
               </a></td>
               <td>@appointment.status</td>
               @if (User.IsInRole("Vet"))
@@ -108,11 +108,9 @@
               <th scope="row"></th>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
-              <td>
-                  <a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
-                  @appointment.MyPetId
-              </a>
-              </td>   
+              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
+                  <i class="bi bi-three-dots"></i>
+              </a></td> 
               <td>@appointment.status</td>
                   @if (User.IsInRole("Vet"))
                     {
@@ -129,10 +127,9 @@
               <th scope="row"></th>
               <td>@appointment.Time</td>
               <td>@appointment.Description</td>
-              <td><a asp-controller="MyPet" asp-action="Details" asp-route-id="@appointment.MyPetId">
-                  @appointment.MyPetId
-                  </a>
-              </td>
+             <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
+                  <i class="bi bi-three-dots"></i>
+              </a></td>
               <td>@appointment.status</td>
               @if (User.IsInRole("Vet"))
                 {

@@ -12,6 +12,10 @@
                 Book an appointment
             </h2>
             <hr />
+            <h5 class="text-danger">
+                Please be careful while booking an appointment. <br />
+                Check carefully at which time our vet will be available to take care of your pet.
+            </h5>
         </div>
         @*<div asp-validation-summary="All"></div>*@
         <div class="mb-3">
@@ -26,22 +30,37 @@
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
 
-        <div class="mb-3">
-            <label>Add your pet</label>
-            <select asp-for="MyPetId" asp-items="Model.MyPets" class="form-control"></select>
-            <span asp-validation-for="MyPetId" class="text-danger"></span>
-        </div>
+            @if(Model.MyPets.Count() == 0)
+            {
+              <div class="mb-3">
+                <p class="text-warning"> Cannot make an appointment without registering your pet first!
+                    <br>
+                    <a asp-controller="MyPets" asp-route="Create">Add</a>
+                    one now!
+                </p>
+              </div>
+            } 
+            else
+            {          
+            <div class="mb-3">
+                <label>Choose your pet</label>
+                <select asp-for="MyPetId" 
+                asp-items="Model.MyPets" 
+                class="form-control"></select>
+                <span asp-validation-for="MyPetId" class="text-danger"></span>
+            </div>
 
-        @*<div class="mb-3">
-            <label asp-for="status"></label>
-            <select asp-for="status" asp-items="Html.GetEnumSelectList<Status>()">
-                <option asp-for="status" selected="selected" value="">Please select </option>
-             </select>
-        </div>*@
+            @*<div class="mb-3">
+                <label asp-for="status"></label>
+                <select asp-for="status" asp-items="Html.GetEnumSelectList<Status>()">
+                    <option asp-for="status" selected="selected" value="">Please select </option>
+                 </select>
+            </div>*@
 
-        <button type="submit" class="btn btn-primary" style="width:150px">
-            Create
-        </button>
+            <button type="submit" class="btn btn-primary" style="width:150px">
+                Create
+            </button>
+            }
         <a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary">
             Cancel
         </a>

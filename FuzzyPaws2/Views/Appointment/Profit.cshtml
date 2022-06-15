@@ -4,6 +4,28 @@
     {
         if (monthNr == 1)
             return "January";
+        if (monthNr == 2)
+            return "February";
+        if (monthNr == 3)
+            return "March";
+        if (monthNr == 4)
+            return "April";
+        if (monthNr == 5)
+            return "May";
+        if (monthNr == 6)
+            return "June";
+        if (monthNr == 7)
+            return "July";
+        if (monthNr == 8)
+            return "August";
+        if (monthNr == 9)
+            return "September";
+        if (monthNr == 10)
+            return "October";
+        if (monthNr == 11)
+            return "November";
+        if (monthNr == 12)
+            return "December";
 
         return "";
     }
@@ -29,7 +51,7 @@
 }
 @while( i < 13){
     <h6 class="text-success">
-        Month @(getMonthName(i)): @(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))$
+        @(getMonthName(i)): @(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))$
     </h6>
         i++;
     }

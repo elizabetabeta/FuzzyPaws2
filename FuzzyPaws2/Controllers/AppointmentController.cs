@@ -10,16 +10,19 @@ namespace FuzzyPaws2.Controllers
     public class AppointmentController : Controller
     { 
         private readonly IAppointmentService _appointmentService;
+        private readonly ISelectListService _selectListService;
         private readonly IMapper _mapper;
         private readonly ApplicationDbContext _context;
 
         public AppointmentController(IAppointmentService appointmentService,
                                      IMapper mapper,
-                                     ApplicationDbContext context)
+                                     ApplicationDbContext context,
+                                     ISelectListService selectListService)
         {
             _appointmentService = appointmentService;
             _mapper = mapper;
             _context = context;
+            _selectListService = selectListService;
         }
 
         public async Task<IActionResult> Index()
@@ -34,9 +37,19 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Vet")]
         public async Task<IActionResult> Profit()
         {
             var model = await _appointmentService.GetAppointmentsAsync();
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            var model = await _appointmentService.GetAppointmentsById(id);
+            if (model == null)
+                return NotFound();
+
             return View(model);
         }
 
@@ -80,11 +93,12 @@ namespace FuzzyPaws2.Controllers
         }
 
         [Authorize(Roles = "Vet")]
-        public IActionResult Status(int id)
+        public async Task<IActionResult> Status(int id)
         {
             var appointment = _appointmentService.GetById(id);
 
             var mappedApp = _mapper.Map<CreateAppointmentViewModel>(appointment);
+            mappedApp.MyPets = await _selectListService.GetMyPets(false);
 
             return View(mappedApp);
 
@@ -104,9 +118,13 @@ namespace FuzzyPaws2.Controllers
             _context.Update(app);
             _context.SaveChanges();
 
-            TempData["success"] = "Appointment status changed successfully";
+            TempData["success"] = "Appointment edited successfully";
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new
+            {
+                id = model.Id
+
+            });
         }
     }
 }

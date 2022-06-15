@@ -22,8 +22,8 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="MyPetId"></label>
-            <input asp-for="MyPetId" readonly class="form-control"/>  
+            <label> Pet name </label>
+            <select asp-for="MyPetId" asp-items="Model.MyPets" disabled class="form-control"></select>
         </div>
 
         <div class="mb-3">
@@ -46,7 +46,7 @@
         <button type="submit" class="btn btn-primary" style="width:150px">
             Update
         </button>
-        <a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary">
+        <a asp-controller="Appointment" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
             Cancel
         </a>
 

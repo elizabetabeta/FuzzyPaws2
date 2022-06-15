@@ -4,8 +4,12 @@ using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.Appointments;
+using iTextSharp.text.pdf;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
+using System.Text;
+using iTextSharp.text;
 
 namespace FuzzyPaws2.Services
 {
@@ -50,7 +54,6 @@ namespace FuzzyPaws2.Services
 
         public async Task<Result> CreateAsync(CreateAppointmentViewModel model)
         {
-
             var mappedAppointment = _mapper.Map<Appointment>(model);
             mappedAppointment.status = 0;
 
@@ -69,6 +72,17 @@ namespace FuzzyPaws2.Services
             _context.SaveChangesAsync();
 
             return Result.Success(mappedApp);
+        }
+
+        public async Task<AppointmentDetailsViewModel> GetAppointmentsById(int appId)
+        {
+            var app = _context.Appointments
+                .Include(x => x.MyPets)
+                .FirstOrDefault(p => p.Id == appId);
+
+            AppointmentDetailsViewModel viewModel = _mapper.Map<AppointmentDetailsViewModel>(app);
+
+            return viewModel;
         }
 
     }
