@@ -2,11 +2,16 @@
 using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.ViewModels.Appointments;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Text;
 
 namespace FuzzyPaws2.Controllers
 {
+    [Authorize]
     public class AppointmentController : Controller
     { 
         private readonly IAppointmentService _appointmentService;
@@ -126,5 +131,158 @@ namespace FuzzyPaws2.Controllers
 
             });
         }
+
+        public FileResult CreatePdf()
+        {
+            MemoryStream workStream = new MemoryStream();
+            StringBuilder status = new StringBuilder("");
+            DateTime dTime = DateTime.Now;
+            string strPDFFileName = string.Format("AppointmentDetailsPdf" + dTime.ToString("yyyyMMdd") + "-" + ".pdf");
+            Document doc = new Document();
+            doc.SetMargins(0, 0, 0, 0);
+            PdfPTable tableLayout = new PdfPTable(4);
+            PdfPTable tableLayout2 = new PdfPTable(4);
+            doc.SetMargins(10, 10, 10, 0);
+            PdfWriter.GetInstance(doc, workStream).CloseStream = false;
+            doc.Open();
+            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            Font fontInvoice = new Font(bf, 20, Font.NORMAL);
+            Paragraph paragraph = new Paragraph("Appointments", fontInvoice);
+            paragraph.Alignment = Element.ALIGN_CENTER;
+            doc.Add(paragraph);
+
+            var allProfit = _context.Appointments.Where(x => x.FinalPrice > 0).Sum(b => b.FinalPrice);
+            var monthlyProfit = _context.Appointments.Where(x => x.FinalPrice > 0 && x.Time.Month == DateTime.Now.Month).Sum(b => b.FinalPrice);
+
+            Paragraph mp = new Paragraph("\nProfit for this month: $" + monthlyProfit);
+            mp.Alignment = Element.ALIGN_RIGHT;
+            doc.Add(mp);
+
+            Paragraph p3 = new Paragraph();
+            p3.SpacingAfter = 6;
+            doc.Add(p3);
+
+            Paragraph month = new Paragraph("Finished appointments in this month: \n\n");
+            doc.Add(month);
+            doc.Add(Add_Content_To_PDF_This_Month(tableLayout));
+
+            Paragraph ap = new Paragraph("\nAll time profit: $" + allProfit);
+            ap.Alignment = Element.ALIGN_RIGHT;
+            doc.Add(ap);
+
+            Paragraph all = new Paragraph("All finished appointments: \n\n");
+            doc.Add(all);
+            doc.Add(Add_Content_To_PDF(tableLayout2));
+
+            var year = DateTime.Now.Year;
+            var now = DateTime.Now.Date;
+            var nowYear = now.Year;
+            var nowMonth = now.Month;
+            var nowDay = now.Day;
+
+            var userId = this.User.FindFirstValue(ClaimTypes.Name);
+
+            Paragraph stamp = new Paragraph("\n\n\n\n\n\n©" + year + " - FuzzyPaws\nDate: " +
+                nowDay + "." + nowMonth + "." + nowYear + "." +
+                "\nVet: " + userId);
+            stamp.Alignment = Element.ALIGN_CENTER;          
+            doc.Add(stamp);
+
+            doc.Close();
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+            return File(workStream, "application/pdf", strPDFFileName);
+        }
+
+        protected PdfPTable Add_Content_To_PDF(PdfPTable tableLayout)
+        {
+            float[] headers = { 50, 24, 45, 35 }; //Header Widths  
+            tableLayout.SetWidths(headers); //Set the pdf headers  
+            tableLayout.WidthPercentage = 100; //Set the PDF File witdh percentage  
+            tableLayout.HeaderRows = 1;
+            var count = 1;
+            //Add header  
+            AddCellToHeader(tableLayout, "Date/Time");
+            AddCellToHeader(tableLayout, "Status");
+            AddCellToHeader(tableLayout, "Expected price");
+            AddCellToHeader(tableLayout, "Final Price");
+
+            foreach (var app in _context.Appointments.Where(x => x.status == Models.Status.Finished))
+            {
+                if (count >= 1)
+                {
+                    //Add body  
+                    AddCellToBody(tableLayout, app.Time.ToString(), count);
+                    AddCellToBody(tableLayout, app.status.ToString(), count);
+                    AddCellToBody(tableLayout, "$" + app.ExpectedPrice.ToString(), count);
+                    AddCellToBody(tableLayout, "$" + app.FinalPrice.ToString(), count);
+                    count++;
+                }
+            }
+            return tableLayout;
+        }
+
+        protected PdfPTable Add_Content_To_PDF_This_Month(PdfPTable tableLayout)
+        {
+            float[] headers = { 50, 24, 45, 35 }; //Header Widths  
+            tableLayout.SetWidths(headers); //Set the pdf headers  
+            tableLayout.WidthPercentage = 100; //Set the PDF File witdh percentage  
+            tableLayout.HeaderRows = 1;
+            var count = 1;
+            //Add header  
+            AddCellToHeader(tableLayout, "Date/Time");
+            AddCellToHeader(tableLayout, "Status");
+            AddCellToHeader(tableLayout, "Expected price");
+            AddCellToHeader(tableLayout, "Final Price");
+
+            foreach (var app in _context.Appointments
+                .Where(x => x.status == Models.Status.Finished && x.Time.Month == DateTime.Now.Month))
+            {
+                if (count >= 1)
+                {
+                    //Add body  
+                    AddCellToBody(tableLayout, app.Time.ToString(), count);
+                    AddCellToBody(tableLayout, app.status.ToString(), count);
+                    AddCellToBody(tableLayout, "$" + app.ExpectedPrice.ToString(), count);
+                    AddCellToBody(tableLayout, "$" + app.FinalPrice.ToString(), count);
+                    count++;
+                }
+            }
+            return tableLayout;
+        }
+
+        private static void AddCellToHeader(PdfPTable tableLayout, string cellText)
+        {
+            tableLayout.AddCell(new PdfPCell(new Phrase(cellText, new Font(Font.FontFamily.HELVETICA, 8, 1, BaseColor.BLACK)))
+            {
+                HorizontalAlignment = Element.ALIGN_LEFT,
+                Padding = 8,
+                BackgroundColor = new BaseColor(255, 255, 255)
+            });
+        }
+
+        private static void AddCellToBody(PdfPTable tableLayout, string cellText, int count)
+        {
+            if (count % 2 == 0)
+            {
+                tableLayout.AddCell(new PdfPCell(new Phrase(cellText, new Font(Font.FontFamily.HELVETICA, 8, 1, iTextSharp.text.BaseColor.BLACK)))
+                {
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    Padding = 8,
+                    BackgroundColor = new iTextSharp.text.BaseColor(255, 255, 255)
+                });
+            }
+            else
+            {
+                tableLayout.AddCell(new PdfPCell(new Phrase(cellText, new Font(Font.FontFamily.HELVETICA, 8, 1, iTextSharp.text.BaseColor.BLACK)))
+                {
+                    HorizontalAlignment = Element.ALIGN_LEFT,
+                    Padding = 8,
+                    BackgroundColor = new BaseColor(211, 211, 211)
+                });
+            }
+        }
+     
     }
 }

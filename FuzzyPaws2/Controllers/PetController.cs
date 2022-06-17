@@ -36,7 +36,10 @@ namespace FuzzyPaws2.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             var model = await _petService.GetPetsAsync();
+
+
             return View(model);
         }
 

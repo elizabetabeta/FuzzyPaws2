@@ -4,16 +4,9 @@ using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.Appointments;
-using iTextSharp.text.pdf;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
-using System.Text;
-using iTextSharp.text;
-
-namespace FuzzyPaws2.Services
-{
-    public class AppointmentService : IAppointmentService
+using Microsoft.AspNetCore.Mvc;
+public class AppointmentService : IAppointmentService
     {
         private readonly ApplicationDbContext _context;
         private readonly IMapper _mapper;
@@ -86,4 +79,5 @@ namespace FuzzyPaws2.Services
         }
 
     }
-}
+
+
