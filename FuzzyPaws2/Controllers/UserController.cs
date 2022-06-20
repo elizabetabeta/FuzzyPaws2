@@ -43,9 +43,17 @@ namespace FuzzyPaws2.Controllers
             return View(vet);
         }
 
-        public async Task<IActionResult> User()
+        public async Task<IActionResult> User(string search)
         {
-            var user = await _userService.GetUserAsync();
+            ViewData["CurrentFilter"] = search;
+
+            if (!String.IsNullOrEmpty(search))
+            {
+                var searchModel = await _userService.GetUserAsync(search);
+                return View(searchModel);
+            }
+
+            var user = await _userService.GetUserAsync(search);
             return View(user);
         }
 

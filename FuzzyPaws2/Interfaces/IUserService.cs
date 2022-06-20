@@ -8,7 +8,7 @@ namespace FuzzyPaws2.Interfaces
     {
         Task<UserIndexViewModel> GetAdminAsync();
         Task<UserIndexViewModel> GetVetAsync();
-        Task<UserIndexViewModel> GetUserAsync();
+        Task<UserIndexViewModel> GetUserAsync(string search);
         Task<UserCreateViewModel> PrepareCreateViewModelAsync();
         IdentityUser GetById(string id);
 

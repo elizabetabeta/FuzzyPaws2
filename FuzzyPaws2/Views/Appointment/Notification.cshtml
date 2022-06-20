@@ -1,0 +1,28 @@
+﻿@model AppointmentsIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@if(User.IsInRole("Vet")){
+    @if(Model.AllAppointments.Where(x => x.status == Status.Waiting).Count().Equals(0))
+    {
+    <h1>
+        There is no new waiting appointments.
+    </h1>
+    } else
+    {
+        <h1 class="text text-warning">You have 
+        @Model.AllAppointments.Where(x => x.status == Status.Waiting).Count() 
+        new waiting appointments!</h1>
+        <br />
+        <h2 class="text text-primary">Manage them now 
+            <a asp-controller="Appointment" asp-action="WaitingAppointments">
+                here.
+            </a>
+        </h2>
+    }
+} else {
+    <h1>Nothing to see here.</h1>
+}

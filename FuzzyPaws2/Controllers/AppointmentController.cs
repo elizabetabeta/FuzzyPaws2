@@ -41,6 +41,11 @@ namespace FuzzyPaws2.Controllers
             var model = await _appointmentService.GetAppointmentsAsync();
             return View(model);
         }
+        public async Task<IActionResult> Notification()
+        {
+            var model = await _appointmentService.GetAppointmentsAsync();
+            return View(model);
+        }
 
         [Authorize(Roles = "Vet")]
         public async Task<IActionResult> Profit()

@@ -35,7 +35,41 @@
         }
 
     </div>
+
+    <div class="row pt-4">
+
+        <form asp-action="Index" method="get" class="col-6">
+              <div class="form-actions no-color">
+                   <p>
+                        <input id="search" placeholder="Name..." type="text" name="search" value="@ViewData["CurrentFilter"]" />
+                        <input type="submit" value="Search by name" class="btn btn-primary" /> 
+                   </p>
+              </div>
+        </form>
+        <div class="col-6 text-end">
+            <h3 class="text text-success">Number of pets: @Model.AllPets.Count()</h3>
+        </div>
+    </div>
+     <form asp-action="Index" method="get" class="col-6">
+            <div class="form-actions no-color">
+                <p>
+                    <input id="search" placeholder="Cat, dog, bird..." type="text" name="type" value="@ViewData["CurrentFilter2"]" />
+                    <input type="submit" value="Search by type" class="btn btn-primary" /> 
+                </p>
+            </div>
+    </form>
+    <form asp-action="Index" method="get" class="col-6">
+            <div class="form-actions no-color">
+                <p>
+                    <input id="search" placeholder="Persian, labrador, budgie..." type="text" name="breed" value="@ViewData["CurrentFilter3"]" />
+                    <input type="submit" value="Search by breed" class="btn btn-primary" /> 
+                    <a asp-action="Index" class="btn btn-outline-primary">Full List</a>
+                </p>
+            </div>
+    </form>
+
 </div>
+
 
 <div class="row text-center">
 @foreach(var pet in Model.AllPets)
@@ -71,4 +105,10 @@
         </div>
     }
  </div>
+
+ <style>
+     .search{
+         width:300px;
+     }
+ </style>
                

@@ -31,6 +31,17 @@
                            <h6 class="text text-success">Status: @(Model.IsSold ? "Sold":"Available")</h6>
 
                         }
+                        <br /><br /><br />
+                        <a href="/Pet?type=@Model.PetTypeName">
+                            <h4 class="text text-primary">
+                            Check out all our @(Model.PetTypeName.ToLower())s
+                            </h4>
+                        </a>
+                       <a href="/Pet?breed=@Model.PetBreedName">
+                            <h4 class="text text-primary">
+                            or @(Model.PetBreedName.ToLower())s!
+                            </h4>
+                        </a>
         </div>
             </div>  
  </div>
@@ -59,5 +70,5 @@
 }
 <a asp-controller="Pet" asp-action="Index" class="btn btn-secondary" style="width:250px">
     Go back to the list of pets
-    </a>
+</a>
                     

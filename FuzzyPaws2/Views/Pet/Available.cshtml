@@ -35,6 +35,13 @@
         }
 
     </div>
+
+    <div class="row pt-4">
+       <h3 class="text text-success">Number of available pets: 
+           @Model.AllPets.Where(x => x.IsSold != true).Count()
+       </h3>
+    </div>
+
 </div>
 
     <div class="row text-center">

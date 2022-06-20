@@ -4,6 +4,7 @@ using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
 using FuzzyPaws2.ViewModels.Pets;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FuzzyPaws2.Services
@@ -37,11 +38,53 @@ namespace FuzzyPaws2.Services
         }
 
         //GET ZA VIEW SVIH PET
-        public async Task<PetIndexViewModel> GetPetsAsync()
+        public async Task<PetIndexViewModel> GetPetsAsync(string search, string type, string breed /*, [FromQuery] PetParameters petParameters*/)
         {
+            if (!String.IsNullOrEmpty(search))
+            {
+                var searchModel = new PetIndexViewModel()
+                {
+                    AllPets = await _context.Pets.Where(x => x.Name.Contains(search))
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync()
+                };
+
+                return searchModel;
+
+            }
+
+            else if (!String.IsNullOrEmpty(type))
+            {
+                var typeModel = new PetIndexViewModel()
+                {
+                    AllPets = await _context.Pets.Where(x => x.PetType.Name.Contains(type))
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync()
+                };
+
+                return typeModel;
+
+            }
+            else if (!String.IsNullOrEmpty(breed))
+            {
+                var breedModel = new PetIndexViewModel()
+                {
+                    AllPets = await _context.Pets.Where(x => x.PetBreed.Name.Contains(breed))
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync()
+                };
+
+                return breedModel;
+
+            }
+
             var model = new PetIndexViewModel()
             {
-                AllPets = await _context.Pets.OrderByDescending(x => x.Id).ToListAsync()
+                AllPets = await _context.Pets
+                .OrderByDescending(x => x.Id)
+                //.Skip((petParameters.PageNumber - 1) * petParameters.PageSize)
+                //.Take(petParameters.PageSize)
+                .ToListAsync()
             };
 
             return model;

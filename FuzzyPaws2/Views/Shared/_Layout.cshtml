@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -67,14 +68,27 @@
                                     </li>
                                 </ul>
                          </li> 
-                        }
-                        @if(User.Identity.IsAuthenticated)
-                        {
+                        }                                               
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-controller="MyPet" asp-action="Index">My Pets</a>
                             </li>
+                        @if(User.Identity.IsAuthenticated){
+                            <li class="nav-item ms-auto">
+                                <a asp-controller="Appointment" 
+                                  asp-action="Notification">
+                                  <i class="bi bi-bell" 
+                                  style="color:yellow">
+                                  
+                                        @*@if(Model.AllAppointments.Where(x => x.status == Status.Waiting)
+                                                                 .Count()
+                                                                 .Equals(0))
+                                        {
+                                        }
+                                        @Model.AllAppointments.Where(x => x.status == Status.Waiting).Count()*@
+                                  </i></a>
+                            </li>
                         }
-                        <li class="nav-item ms-auto">
+                        <li class="nav-item">
                             <partial name="_LoginPartial" />
                         </li>
     

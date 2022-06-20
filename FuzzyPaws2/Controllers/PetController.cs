@@ -15,7 +15,6 @@ namespace FuzzyPaws2.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IPetService _petService;
-        private readonly IMyPetService _myPetService;
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly ISelectListService _selectListService;
@@ -23,35 +22,45 @@ namespace FuzzyPaws2.Controllers
                              IMapper mapper,
                              ApplicationDbContext context,
                              IWebHostEnvironment webHostEnvironment,
-                             ISelectListService selectListService,
-                             IMyPetService myPetService)
+                             ISelectListService selectListService)
         {
             _petService = petService;
             _mapper = mapper;
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _selectListService = selectListService;
-            _myPetService = myPetService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string search, 
+                                               string type,
+                                               string breed) /*, [FromQuery] PetParameters petParameters*/
         {
+            ViewData["CurrentFilter"] = search;
+            ViewData["CurrentFilter2"] = type;
+            ViewData["CurrentFilter3"] = breed;
 
-            var model = await _petService.GetPetsAsync();
-
+            var model = await _petService.GetPetsAsync(search, type, breed);
 
             return View(model);
         }
 
-        public async Task<IActionResult> Available()
+        public async Task<IActionResult> Available(string search, string type, string breed)
         {
-            var model = await _petService.GetPetsAsync();
+            ViewData["CurrentFilter"] = search;
+            ViewData["CurrentFilter2"] = type;
+            ViewData["CurrentFilter3"] = breed;
+
+            var model = await _petService.GetPetsAsync(search, type, breed);
             return View(model);
         }
 
-        public async Task<IActionResult> Unavailable()
+        public async Task<IActionResult> Unavailable(string search, string type, string breed)
         {
-            var model = await _petService.GetPetsAsync();
+            ViewData["CurrentFilter"] = search;
+            ViewData["CurrentFilter2"] = type;
+            ViewData["CurrentFilter3"] = breed;
+
+            var model = await _petService.GetPetsAsync(search, type, breed);
             return View(model);
         }
 

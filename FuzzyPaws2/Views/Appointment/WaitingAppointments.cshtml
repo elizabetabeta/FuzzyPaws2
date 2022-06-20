@@ -8,7 +8,7 @@
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary"> 
-                My Appointments
+                Waiting Appointments
             </h2>
         </div>
         <div class="col-6 text-end">
@@ -18,6 +18,12 @@
         </div>
     </div>
 </div>
+@if(Model.AllAppointments.Where(x => x.status == Status.Waiting).Count().Equals(0))
+{
+    <h1>There's no waiting appointments right now.</h1>
+}
+else
+{   
 
 <table class="table table-hover">
     <thead>
@@ -62,6 +68,8 @@
     </tbody>
  }
  </table>
+
+ }
 
  <div class="container p-3">
     <div class="row pt-4">

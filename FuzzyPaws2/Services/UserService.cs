@@ -41,8 +41,20 @@ namespace FuzzyPaws2.Services
 
             return model;
         }
-        public async Task<UserIndexViewModel> GetUserAsync()
+        public async Task<UserIndexViewModel> GetUserAsync(string search)
         {
+            if (!String.IsNullOrEmpty(search))
+            {
+                var searchModel = new UserIndexViewModel()
+                {
+                    AllUsers = await _context.AspNetUsers.Where(x => x.UserName.Contains(search))
+                    .OrderByDescending(x => x.Id)
+                    .ToListAsync()
+                };
+
+                return searchModel;
+
+            }
             var model = new UserIndexViewModel()
             {
                 AllUsers = await _userManager.GetUsersInRoleAsync("USER")
