@@ -1,10 +1,10 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿
+<h1 class="display-4 text-center">Welcome to our Pet Shop</h1> <br />
+
+<ajax-loader ajax-action="DashboardPins" ajax-controller="Home" id="dashboard-pins"></ajax-loader>
 
 <div class="text-center">
     <br />
-    <h1 class="display-4">Welcome to our Pet Shop</h1> <br />
     <h2> Looking for a new fuzzy companion? <br />
         Check out all available pets <i class="bi bi-arrow-right-circle"></i> <a asp-controller="Pet" asp-action="Index"> HERE </a></h2>
     <br />

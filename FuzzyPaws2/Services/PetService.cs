@@ -38,8 +38,13 @@ namespace FuzzyPaws2.Services
         }
 
         //GET ZA VIEW SVIH PET
-        public async Task<PetIndexViewModel> GetPetsAsync(string search, string type, string breed /*, [FromQuery] PetParameters petParameters*/)
+        public async Task<PetIndexViewModel> GetPetsAsync(string? search, 
+                                                          string? type, 
+                                                          string? breed
+                                                          /*int currentPage , [FromQuery] PetParameters petParameters*/)
         {
+            //int maxRows = 10;
+
             if (!String.IsNullOrEmpty(search))
             {
                 var searchModel = new PetIndexViewModel()
@@ -82,10 +87,15 @@ namespace FuzzyPaws2.Services
             {
                 AllPets = await _context.Pets
                 .OrderByDescending(x => x.Id)
-                //.Skip((petParameters.PageNumber - 1) * petParameters.PageSize)
-                //.Take(petParameters.PageSize)
+                //.Skip((currentPage - 1) * maxRows)
+                //.Take(maxRows)
                 .ToListAsync()
             };
+
+            //double pageCount = (double)((decimal)_context.Pets.Count() / Convert.ToDecimal(maxRows));
+            //model.PageCount = (int)Math.Ceiling(pageCount);
+
+            //model.CurrentPageIndex = currentPage;
 
             return model;
         }

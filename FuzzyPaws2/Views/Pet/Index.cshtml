@@ -63,7 +63,7 @@
                 <p>
                     <input id="search" placeholder="Persian, labrador, budgie..." type="text" name="breed" value="@ViewData["CurrentFilter3"]" />
                     <input type="submit" value="Search by breed" class="btn btn-primary" /> 
-                    <a asp-action="Index" class="btn btn-outline-primary">Full List</a>
+                    <a asp-action="Index" class="btn btn-secondary">Full List</a>
                 </p>
             </div>
     </form>
@@ -107,8 +107,10 @@
  </div>
 
  <style>
-     .search{
+     #search{
          width:300px;
+         border-radius: 10px;
+         padding: 5px;
      }
  </style>
                

@@ -33,7 +33,7 @@ namespace FuzzyPaws2.Controllers
 
         public async Task<IActionResult> Index(string search, 
                                                string type,
-                                               string breed) /*, [FromQuery] PetParameters petParameters*/
+                                               string breed)
         {
             ViewData["CurrentFilter"] = search;
             ViewData["CurrentFilter2"] = type;

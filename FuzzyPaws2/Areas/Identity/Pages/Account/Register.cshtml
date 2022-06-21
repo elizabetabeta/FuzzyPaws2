@@ -30,11 +30,14 @@
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Submit</button>
         </form>
         <br />  
-        <div>
-        <a asp-controller="User" asp-action="User">
+        @if (User.IsInRole("Admin"))
+        {
+            <div>
+                <a asp-controller="User" asp-action="User">
             <button class="btn btn-secondary">List of Users</button>
-        </a>
-        </div>
+            </a>
+            </div>
+        }
     </div>
     @*<div class="col-md-6 col-md-offset-2">
         <section>
