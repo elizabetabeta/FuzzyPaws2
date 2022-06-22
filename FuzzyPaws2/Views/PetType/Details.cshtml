@@ -3,28 +3,32 @@
 <br />
 <div class="row">
     <div class="col-4">
-        <img class="w-100" 
+        <img class="w-100" id="imgshadow"
             src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
         alt="Card image cap">
             </div>
                 <div class="col">
                     <div class = "align-items-center">
-                        <h5 class="card-title">@Model.Name</h5>
+                        <h5 class="card-title text-primary">@Model.Name</h5>
+                        <hr />
                
                         <p class="card-text">@Model.Description</p>
 
                         <br /><br /><br />
-                        <a href="/Pet?type=@Model.Name">
-                            <h4 class="text text-primary">
-                            Check out all our @(Model.Name.ToLower())s!
-                            </h4>
-                        </a>
+                        <div class="btn btn-outline-info">
+                            <a href="/Pet?type=@Model.Name">
+                                <h4 class="text text-primary">
+                                Check out all our @(Model.Name.ToLower())s!
+                                </h4>
+                            </a>
+                        </div>
 
                     </div>
             </div>  
  </div>
 
  <br />
+ <hr />
 @if (User.IsInRole("Admin"))
 {
     <a asp-controller="PetType" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">
@@ -36,8 +40,8 @@
                         Delete
                     </a>
 } &nbsp;
-    <a asp-controller="PetType" asp-action="Index" class="btn btn-secondary" style="width:250px">
-    List of all types
+    <a asp-controller="PetType" asp-action="Index" class="btn btn-secondary">
+    All types
     </a>
 
 <style>

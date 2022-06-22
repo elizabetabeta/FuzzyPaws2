@@ -8,7 +8,7 @@
 <br />
 <div class="row">
     <div class="col-5">
-        <img class="w-100" 
+        <img class="w-100" id="imgshadow"
         src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
         alt="What are you waiting for? Add my pic!">
             </div>
@@ -17,12 +17,16 @@
                         <h3 class="card-title text-primary">@Model.Name</h3>
                         <hr />
                         <h5 class="card-text">@Model.PetTypeName
-                        <a asp-controller="PetType" asp-action="Details" asp-route-id="@Model.PetTypeId">
-                        <i class="bi bi-question-circle-fill"></i>
+                        <a asp-controller="PetType" asp-action="Details" 
+                           asp-route-id="@Model.PetTypeId"
+                           class="btn btn-outline-primary">                      
+                                Check <i class="fa-solid fa-paw"></i>
                         </a> </h5>
                         <h5 class="card-text">@Model.PetBreedName
-                        <a asp-controller="PetBreed" asp-action="Details" asp-route-id="@Model.PetBreedId">
-                        <i class="bi bi-question-circle-fill"></i>
+                        <a asp-controller="PetBreed"  
+                           asp-action="Details" asp-route-id="@Model.PetBreedId"
+                           class="btn btn-outline-primary">
+                                Check <i class="fa-solid fa-paw"></i>
                         </a> </h5>
                         <br />
                         <p class="card-text">@Model.Description</p>
@@ -32,6 +36,7 @@
  </div>
 
  <br />
+ <hr />
 @if (@UserManager.GetUserId(User).Equals(@Model.UserId))
 {
     <a asp-controller="MyPet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">

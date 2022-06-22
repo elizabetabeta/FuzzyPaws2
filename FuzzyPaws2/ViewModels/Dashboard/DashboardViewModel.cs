@@ -11,6 +11,8 @@ namespace FuzzyPaws2.ViewModels.Dashboard
         public int UsersCount { get; set; }
 
         public IEnumerable<Appointment>? App { get; set; }
+        public IEnumerable<Pet>? Pets { get; set; }
+        public IEnumerable<MyPet>? MyPets { get; set; }
         //public IEnumerable<Pet>? AllPets { get; set; }
         //public IEnumerable<IdentityUser>? AllUsers { get; set; }
 

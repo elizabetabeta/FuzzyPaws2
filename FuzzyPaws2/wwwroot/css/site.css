@@ -15,9 +15,48 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: #f3d4ff;
+    background-color: whitesmoke;
 }
 
 nav {
     background-color: mediumpurple;
+}
+
+#imgshadow {
+    border-radius: 25px;
+    -webkit-box-shadow: -16px 15px 16px 2px rgba(173,173,173,0.93);
+    -moz-box-shadow: -16px 15px 16px 2px rgba(173,173,173,0.93);
+    box-shadow: -16px 15px 16px 2px rgba(173,173,173,0.93);
+}
+
+#imglist{
+    border-radius: 25px;
+}
+
+@media screen and (max-width: 992px) {
+    #imglist {
+        border-radius: 25px;
+        height:auto;
+        
+    }
+}
+
+
+#cardradius{
+    border-radius: 25px;
+}
+
+@media screen and (max-width: 992px) {
+    #cardradius {
+        border-radius: 25px;
+        height: auto;
+        width:500px;
+    }
+}
+
+#search {
+    width: auto;
+    border-radius: 10px;
+    padding: 5px;
+
 }

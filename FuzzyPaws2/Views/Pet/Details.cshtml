@@ -3,7 +3,7 @@
 <br />
 <div class="row">
     <div class="col-5">
-        <img class="w-100" 
+        <img class="w-100" id="imgshadow"
         src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
         alt="Card image cap">
             </div>
@@ -12,41 +12,58 @@
                         <h3 class="card-title text-primary">@Model.Name</h3>
                         <hr />
                         <h5 class="card-text">@Model.PetTypeName
-                        <a asp-controller="PetType" asp-action="Details" asp-route-id="@Model.PetTypeId">
-                        <i class="bi bi-question-circle-fill"></i>
+                            &nbsp;
+                        <a asp-controller="PetType" asp-action="Details" 
+                           asp-route-id="@Model.PetTypeId"
+                           class="btn btn-outline-primary">                      
+                                Check <i class="fa-solid fa-paw"></i>
                         </a> </h5>
                         <h5 class="card-text">@Model.PetBreedName
-                        <a asp-controller="PetBreed" asp-action="Details" asp-route-id="@Model.PetBreedId">
-                        <i class="bi bi-question-circle-fill"></i>
+                        <a asp-controller="PetBreed"  
+                           asp-action="Details" asp-route-id="@Model.PetBreedId"
+                           class="btn btn-outline-primary">
+                                Check <i class="fa-solid fa-paw"></i>
                         </a> </h5>
                         <br />
                         <p class="card-text">@Model.Description</p>
                         <p>Price: @Model.Price.ToString()$</p>
                         @if (Model.IsSold.Equals(true))
                         {
-                            <h6 class="text text-danger">Status: @(Model.IsSold ? "Sold":"Available")</h6>
+                            <h6 class="text text-danger">Status: 
+                                <i class="fa-solid fa-x"></i>
+                                @(Model.IsSold ? "Sold":"Available")
+                            </h6>
                         }
 
                         else{
-                           <h6 class="text text-success">Status: @(Model.IsSold ? "Sold":"Available")</h6>
+                           <h6 class="text text-success">Status: 
+
+                               <i class="fa-solid fa-check"></i>
+                               @(Model.IsSold ? "Sold":"Available")
+                               
+                           </h6>
 
                         }
-                        <br /><br /><br />
-                        <a href="/Pet?type=@Model.PetTypeName">
-                            <h4 class="text text-primary">
-                            Check out all our @(Model.PetTypeName.ToLower())s
-                            </h4>
-                        </a>
-                       <a href="/Pet?breed=@Model.PetBreedName">
-                            <h4 class="text text-primary">
-                            or @(Model.PetBreedName.ToLower())s!
-                            </h4>
-                        </a>
-        </div>
-            </div>  
+                        <br /><br /><br />                      
+
+                        <div class="btn btn-outline-info">
+                            <a href="/Pet?type=@Model.PetTypeName">
+                                <h4 class="text text-primary">
+                                Check out all our @(Model.PetTypeName.ToLower())s
+                                </h4>
+                            </a>
+                           <a href="/Pet?breed=@Model.PetBreedName">
+                                <h4 class="text text-primary">
+                                or @(Model.PetBreedName.ToLower())s!
+                                </h4>
+                            </a>
+                        </div>
+            </div>
+      </div>  
  </div>
 
- <br />
+ <br /> 
+ <hr />
 
 @if(User.IsInRole("Admin"))
 {
@@ -68,7 +85,7 @@
 {
     <btn class="btn btn-danger" disabled> Not available </btn>
 }
-<a asp-controller="Pet" asp-action="Index" class="btn btn-secondary" style="width:250px">
-    Go back to the list of pets
+<a asp-controller="Pet" asp-action="Index" class="btn btn-secondary">
+    All pets
 </a>
                     

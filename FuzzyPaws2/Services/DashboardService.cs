@@ -26,29 +26,17 @@ namespace FuzzyPaws2.Services
             model.AvailablePetsCount = _context.Pets.Where(x=>!x.IsSold).Count();
             model.SoldPetsCount = _context.Pets.Where(x=>x.IsSold).Count();
             model.UsersCount = _context.Users.Count();
+            model.App = _context.Appointments.OrderByDescending(x => x.Id).Take(10).ToList();
+            model.Pets = _context.Pets.Where(x => x.IsSold == false)
+                                                     .OrderByDescending(x => x.Id)
+                                                     .Take(4)
+                                                     .ToList();
+            model.MyPets = _context.MyPets.OrderByDescending(x => x.Id)
+                                                         .Take(5)
+                                                         .ToList();
 
             return model;
         }
 
-        //public async Task<DashboardViewModel> GetPetsAsync()
-        //{
-        //    var model = new DashboardViewModel()
-        //    {
-        //        AllPets = await _context.Pets
-        //        .ToListAsync()
-        //    };
-
-        //    return model;
-        //}
-
-        //public async Task<DashboardViewModel> GetUserAsync()
-        //{
-        //    var model = new DashboardViewModel()
-        //    {
-        //        AllUsers = await _userManager.GetUsersInRoleAsync("USER")
-        //    };
-
-        //    return model;
-        //}
     }
 }

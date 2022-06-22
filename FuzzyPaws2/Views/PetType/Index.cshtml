@@ -7,7 +7,7 @@
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary"> 
-                List of pet types <img src="~/images/dog-icon.png" style="height50px;width:50px"/>
+                List of pet types <i class="fa-solid fa-dog"></i>
             </h2>
         </div>
         @if (User.IsInRole("Admin"))
@@ -25,9 +25,9 @@
 <div class="row text-center">
 @foreach(var type in Model.AllTypesOfPets)
 {            
-    <div class="card col-3 pb-2 pt-2">
+    <div class="card col-3 pb-2 pt-2" id="cardradius">
         <a asp-controller="PetType" asp-action="Details" asp-route-id="@type.Id">
-            <img class="card-img-top" height="100%" width="100" style="min-height:280px" src="@FileLocation.RetriveFileFromFolder@type.Image" asp-append-version="true" alt="Card image cap" />  
+            <img id="imglist" class="card-img-top" height="100%" width="100" style="min-height:280px" src="@FileLocation.RetriveFileFromFolder@type.Image" asp-append-version="true" alt="Card image cap" />  
         </a>
             <div class="card-body">
                 <a asp-controller="PetType" asp-action="Details" asp-route-id="@type.Id">

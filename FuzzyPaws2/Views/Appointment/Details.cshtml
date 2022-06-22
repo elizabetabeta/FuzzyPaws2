@@ -2,52 +2,58 @@
 
 <br />
 <div class="row">
-    <div class="col-3">
-        <img
+    <div class="col-4">
+        <img id="imgshadow"
         src="@FileLocation.RetriveFileFromFolder@Model.MyPetImage" class="img-thumbnail"  asp-append-version="true"
         alt="No image"
         >
+
     </div>
                 <div class="col">
                     <div class = "align-items-center">
                     @if (@Model.status.Equals(Status.Waiting))
                     {
                         <h3 class="card-text text-warning">
-                            Status: @Model.status
+                            <i class="fas fa-circle-notch fa-spin"></i>
+                            @Model.status for approval
                         </h3>
                     } 
                     else if (@Model.status.Equals(Status.Confirmed))
                     {
                         <h3 class="card-text text-success">
-                            Status: @Model.status
+                            <i class="fa-solid fa-check"></i>
+                            @Model.status
                         </h3>
                     }
                     else if (@Model.status.Equals(Status.Rejected))
                     {
                         <h3 class="card-text text-danger">
-                            Status: @Model.status
+                            <i class="fa-solid fa-x"></i>
+                            @Model.status
                         </h3>
                     }
                     else
                     {
                         <h3 class="card-text text-secondary">
-                            Status: @Model.status
+                            @Model.status appointment
+                              <i class="fa-solid fa-heart fa-beat"></i>
                         </h3>
                     }
-                        <h5 class="card-text">@Model.MyPetName <br />
+                        <hr />
+                        <h3 class="card-text text-primary">@Model.MyPetName &nbsp;
                             <a asp-controller="MyPet" asp-action="Details" asp-route-id="@Model.MyPetId">
-                            Check out this pet!
+                            <i class="fa-solid fa-paw"></i>
                             </a> 
-                        </h5>
+                        </h3>
                         <br />
-                        <h5 class="card-text">
+                        <h5 class="card-text text-primary">
                             Description of the issue: <br />
-                            <p>@Model.Description</p>
+                            <p class="text text-secondary">@Model.Description</p>
                         </h5>
                         <br />
-                        <h5 class="card-text">
+                        <h5 class="card-text text-primary">
                             Scheduled time for the appointment: <br />
-                            @Model.Time
+                            <p class="text text-secondary">@Model.Time</p>
                         </h5>
                         <br />
                         @if(User.IsInRole("Vet")){
@@ -63,6 +69,7 @@
                                    Change status and/or price
                             </a></td>
                         }
+                        <hr />
                     </div>
                 </div>  
 </div>

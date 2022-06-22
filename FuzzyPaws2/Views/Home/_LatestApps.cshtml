@@ -1,0 +1,71 @@
+﻿@model DashboardViewModel
+
+<div class="card">
+    <div class="card-header border-transparent">
+        <h3 class="card-title">10 latest appointments</h3>
+        <div class="card-tools">
+    </div>
+</div>
+
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table m-0">
+                <thead>
+                    <tr>
+                        <th>Date/Time</th>
+                        <th>Description</th>
+                        <th>Details</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+    @foreach(var app in @Model.App){
+        <tbody>
+            <tr>
+                <td>@app.Time</td>
+                <td>@app.Description</td>
+                <td><a asp-controller="Appointment" 
+                       asp-action="Details"
+                       asp-route-id="@app.Id">
+                        <i class="bi bi-three-dots"></i>
+                    </a>
+                </td>
+                <td>
+                    @if(app.status.Equals(Status.Confirmed)){
+                       <span class="badge badge-success">@app.status</span>
+                    } 
+                    else if(app.status.Equals(Status.Finished))
+                    {
+                       @app.status
+                    }
+                    else if(app.status.Equals(Status.Waiting))
+                    {
+                        <span class="badge badge-warning">@app.status</span>
+                    }
+                    else
+                    {
+                        <span class="badge badge-danger">@app.status</span>
+                    }
+
+                </td>
+            </tr>    
+        </tbody>
+    }
+    </table>
+    </div>
+
+    </div>
+
+    <div class="card-footer clearfix">
+    <a asp-controller="Appointment"
+       asp-action="Create" 
+       class="btn btn-sm btn-info float-left">
+       Place New Order
+   </a>
+    <a asp-controller="Appointment"
+       asp-action="Index" 
+       class="btn btn-sm btn-secondary float-right">
+       View All Orders
+   </a>
+    </div>
+
+</div>

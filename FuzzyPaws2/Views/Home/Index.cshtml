@@ -1,10 +1,28 @@
 ﻿@model HomeIndexViewModel
-<h1 class="display-4 text-center">Welcome to our Pet Shop</h1>
+<h1 class="display-4 text-center">Welcome to our Pet Shop <i class="fa fa-paw"></i></h1>
 <hr />
 
 <partial name="_DashboardPins" model="Model.dashboardViewModel" />
+<div class="row">
+    <div class="col-6">
+        <partial name="_LatestApps" model="Model.dashboardViewModel" />
+    </div>
+    <div class="col-6">
+        <partial name="_LatestPets" model="Model.dashboardViewModel"/>
 
-<div class="text-center">
+        <img src="https://freepngdownload.com/image/thumb/cat-playing-png.png" class="img-fluid" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <img src="~/images/rabbit.png" class="img-fluid"/>
+    </div>
+    <div class="col-9">
+        <partial name="_LatestMyPets" model="Model.dashboardViewModel"/>
+    </div>
+</div>
+
+@*<div class="text-center">
     <br />
     <h2>
         Looking for a new fuzzy companion? <br />
@@ -32,5 +50,6 @@
     </p>
     <img src="https://freepngdownload.com/image/thumb/cat-playing-png.png" class="img-fluid" />
 
-</div>
+</div>*@
+<br /><br /><br />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>

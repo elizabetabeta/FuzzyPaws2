@@ -25,6 +25,14 @@ namespace FuzzyPaws2.Controllers
         {
             var indexViewModel = new HomeIndexViewModel();
             indexViewModel.dashboardViewModel = _dashboardService.GetAppointmentsAsync();
+            indexViewModel.LatestApps = _context.Appointments.OrderByDescending(x => x.Id).Take(10).ToList();
+            indexViewModel.LatestPets = _context.Pets.Where(x => x.IsSold == false)
+                                                     .OrderByDescending(x => x.Id)
+                                                     .Take(4)
+                                                     .ToList();
+            indexViewModel.LatestMyPets = _context.MyPets.OrderByDescending(x => x.Id)
+                                                         .Take(5)
+                                                         .ToList();
 
             return View(indexViewModel);
         }

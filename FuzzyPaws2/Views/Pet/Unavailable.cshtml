@@ -49,9 +49,9 @@
         {
         @if (pet.IsSold.Equals(true))
         {
-            <div class="card col-4 pt-2 mb-1"> @*my-1 mx-1 me-1 ms-1*@
+            <div class="card col-4 pt-2 mb-1" id="cardradius"> @*my-1 mx-1 me-1 ms-1*@
                 <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
-                    <img class="card-img-top" height="100%" width="100" style="min-height:350px" src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Card image cap" />  
+                    <img id="imglist" class="card-img-top" height="100%" width="100" style="min-height:350px" src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Card image cap" />  
                 </a>
                 <div class="card-body">
                     <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">

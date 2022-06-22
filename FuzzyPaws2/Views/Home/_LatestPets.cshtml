@@ -1,0 +1,36 @@
+﻿@model DashboardViewModel
+
+<div class="card">
+    <div class="card-header">
+    <h3 class="card-title">Last pets added that are available!</h3>
+    <div class="card-tools">
+        <a asp-controller="Pet" asp-action="Available">
+            <span class="badge badge-success">
+                @Model.AvailablePetsCount available pets 
+            </span>
+        </a>
+    </div>
+</div>
+
+<div class="card-body p-0">
+<ul class="users-list clearfix">
+@foreach(var pet in @Model.Pets)
+{
+<li>
+    <a asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">
+    <img src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Pet Image">
+    </a>
+    <a class="users-list-name" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">@pet.Name</a>
+    <span class="users-list-date">@(pet.Price)$</span>
+</li>
+
+}
+</ul>
+</div>
+
+<div class="card-footer text-center">
+<a asp-controller="Pet" asp-action="Index">View All Pets</a>
+</div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
