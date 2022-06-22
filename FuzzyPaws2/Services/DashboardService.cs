@@ -18,13 +18,14 @@ namespace FuzzyPaws2.Services
             _context = context;
             _userManager = userManager;
         }
-        public async Task<DashboardViewModel> GetAppointmentsAsync()
+        public DashboardViewModel GetAppointmentsAsync()
         {
-            var model = new DashboardViewModel()
-            {
-                AppointmentsCount = _context.Appointments.Count(),
-                AvailablePetsCount = _context.Pets.Where(x=>!x.IsSold).Count()
-            };
+            var model = new DashboardViewModel();
+
+            model.AppointmentsCount = _context.Appointments.Count();
+            model.AvailablePetsCount = _context.Pets.Where(x=>!x.IsSold).Count();
+            model.SoldPetsCount = _context.Pets.Where(x=>x.IsSold).Count();
+            model.UsersCount = _context.Users.Count();
 
             return model;
         }

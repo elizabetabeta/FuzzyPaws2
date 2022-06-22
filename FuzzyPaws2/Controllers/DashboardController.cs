@@ -11,9 +11,9 @@ namespace FuzzyPaws2.Controllers
         {
             _dashboardService = dashboardService;
         }
-        public async Task<IActionResult> _Dashboard()
+        public IActionResult _Dashboard()
         {
-            var model = await _dashboardService.GetAppointmentsAsync();
+            var model = _dashboardService.GetAppointmentsAsync();
             return PartialView(model);
         }
     }
