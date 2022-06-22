@@ -26,18 +26,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Pet" asp-action="Index">Pets</a>
                         </li>
-                        <li  class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="PetType" asp-action="Index">Types</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" asp-controller="PetBreed" asp-action="Index">Breeds</a>
-                                    </li>
-                                </ul>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a class="dropdown-item" asp-controller="PetType" asp-action="Index">Types</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" asp-controller="PetBreed" asp-action="Index">Breeds</a>
+                                </li>
+                            </ul>
                         <li class="nav-item ms-2">
                             <a class="nav-link text-light" asp-controller="Product" asp-action="Index">Products</a>
                         </li>
@@ -47,9 +47,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Home" asp-action="Contact">Contact</a>
                         </li>
-                        @if(User.IsInRole("Admin"))
+                        @if (User.IsInRole("Admin"))
                         {
-                            <li  class="nav-item dropdown">
+                            <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle text-light" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     Administration
                                 </a>
@@ -67,31 +67,35 @@
                                         <a class="dropdown-item" asp-controller="User" asp-action="User">Users</a>
                                     </li>
                                 </ul>
-                         </li> 
-                        }                                               
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="MyPet" asp-action="Index">My Pets</a>
                             </li>
-                        @if(User.Identity.IsAuthenticated){
+
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="MyPet" asp-action="Index">My Pets</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
+                        {
                             <li class="nav-item ms-auto">
-                                <a asp-controller="Appointment" 
-                                  asp-action="Notification">
-                                  <i class="bi bi-bell" 
-                                  style="color:yellow">°      
-                                        
+                                <a asp-controller="Appointment"
+                                   asp-action="Notification">
+                                    <i class="bi bi-bell"
+                                       style="color:yellow">
+                                        °
+
                                         @*@if(Model.AllAppointments.Where(x => x.status == Status.Waiting)
-                                                                 .Count()
-                                                                 .Equals(0))
-                                        {
-                                        }
-                                        @Model.AllAppointments.Where(x => x.status == Status.Waiting).Count()*@
-                                  </i></a>
+                                                                     .Count()
+                                                                     .Equals(0))
+                                            {
+                                            }
+                                            @Model.AllAppointments.Where(x => x.status == Status.Waiting).Count()*@
+                                    </i>
+                                </a>
                             </li>
                         }
                         <li class="nav-item">
                             <partial name="_LoginPartial" />
                         </li>
-    
+
                     </ul>
                 </div>
             </div>
@@ -99,7 +103,7 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <partial name = "_Notification" />
+            <partial name="_Notification" />
             @RenderBody()
         </main>
     </div>
@@ -111,6 +115,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/jquery.js"></script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

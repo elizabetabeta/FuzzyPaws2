@@ -3,6 +3,8 @@
 <html>
     <head>
        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css">
+       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
+
     </head>
 <body>
     <div class="container-fluid">
@@ -11,11 +13,11 @@
 
             <div class="small-box bg-info"> 
             <div class="inner">
-@*            <h3>@Model.AllPets.Where(x => x.IsSold != true).Count()<sup style="font-size: 20px">%</sup></h3>
-*@            <p>Available pets</p>
+            <h3>@Model.AvailablePetsCount</h3>
+            <p>Available pets</p>
             </div>
             <div class="icon">
-            <i class="ion ion-bag"></i>
+            <i class="fa fa-paw"></i>
             </div>
             <a asp-controller="Pet" asp-action="Available" class="small-box-footer">More info <i class="bi bi-arrow-right-circle-fill"></i></a>
             </div>
@@ -24,12 +26,12 @@
             <div class="col-lg-3 col-6">
 
             <div class="small-box bg-success">
-            <div class="inner">
-@*            <h3>@Model.AllPets.Where(x => x.IsSold == true).Count()<sup style="font-size: 20px">%</sup></h3>
-*@            <p>Sold pets</p>
-            </div>
+                <div class="inner">
+                    <h3>@Model.SoldPetsCount</h3>
+                    <p>Sold pets</p>
+                </div>
             <div class="icon">
-            <i class="ion ion-stats-bars"></i>
+            <i class="fa fa-cat"></i>
             </div>
             <a asp-controller="Pet" asp-action="Unavailable" class="small-box-footer">More info <i class="bi bi-arrow-right-circle-fill"></i></a>
             </div>
@@ -39,11 +41,11 @@
 
             <div class="small-box bg-warning">
             <div class="inner">
-            <h3>@Model.AvailablePetsCount</h3>
+            <h3>@Model.UsersCount</h3>
             <p>User Registrations</p>
             </div>
             <div class="icon">
-            <i class="ion ion-person-add"></i>
+            <i class="fa fa-user"></i>
             </div>
             <a href="#" class="small-box-footer">More info <i class="bi bi-arrow-right-circle-fill"></i></a>
             </div>
@@ -57,7 +59,7 @@
             <p>Booked appointments</p>
             </div>
             <div class="icon">
-            <i class="ion ion-pie-graph"></i>
+            <i class="fa fa-calendar"></i>
             </div>
             <a asp-controller="Appointment" asp-action="Index" class="small-box-footer">More info <i class="bi bi-arrow-right-circle-fill"></i></a>
             </div>

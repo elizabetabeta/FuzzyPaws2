@@ -1,6 +1,7 @@
 ﻿using FuzzyPaws2.Data;
 using FuzzyPaws2.Interfaces;
 using FuzzyPaws2.Models;
+using FuzzyPaws2.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -22,13 +23,16 @@ namespace FuzzyPaws2.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var indexViewModel = new HomeIndexViewModel();
+            indexViewModel.dashboardViewModel = _dashboardService.GetAppointmentsAsync();
+
+            return View(indexViewModel);
         }
 
-        public async Task<IActionResult> DashboardPins()
+        public IActionResult DashboardPins()
         {
-            var model = await _dashboardService.GetAppointmentsAsync();
-            return PartialView("DashboardPins", model);
+            var model = _dashboardService.GetAppointmentsAsync();
+            return PartialView("_DashboardPins", model);
         }
 
         [HttpPost]

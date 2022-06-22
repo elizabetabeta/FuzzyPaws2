@@ -6,7 +6,9 @@ namespace FuzzyPaws2.ViewModels.Dashboard
     public class DashboardViewModel
     {
         public int AppointmentsCount { get; set; }
+        public int SoldPetsCount { get; set; }
         public int AvailablePetsCount { get; set; }
+        public int UsersCount { get; set; }
 
         public IEnumerable<Appointment>? App { get; set; }
         //public IEnumerable<Pet>? AllPets { get; set; }
