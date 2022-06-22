@@ -8,8 +8,8 @@
 @if(User.IsInRole("Vet")){
     @if(Model.AllAppointments.Where(x => x.status == Status.Waiting).Count().Equals(0))
     {
-    <h1>
-        There is no new waiting appointments.
+        <h1 id="pls">           
+            There is no new waiting appointments.          
         </h1>
     } else
     {
