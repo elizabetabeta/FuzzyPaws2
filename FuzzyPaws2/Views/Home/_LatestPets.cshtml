@@ -21,7 +21,7 @@
     <img src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="Pet Image">
     </a>
     <a class="users-list-name" asp-controller="Pet" asp-action="Details" asp-route-id="@pet.Id">@pet.Name</a>
-    <span class="users-list-date">@(pet.Price)$</span>
+    <span class="users-list-date">$@(pet.Price)</span>
 </li>
 
 }

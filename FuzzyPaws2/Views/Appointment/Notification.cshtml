@@ -4,20 +4,20 @@
     ViewData["Title"] = "Index";
 }
 
-
+<br /><br /><br />
 @if(User.IsInRole("Vet")){
     @if(Model.AllAppointments.Where(x => x.status == Status.Waiting).Count().Equals(0))
     {
         <h1 id="pls">           
-            There is no new waiting appointments.          
+            There is no waiting appointments.          
         </h1>
     } else
     {
-        <h1 class="text text-warning">You have 
+        <h1 id="pls" class="text text-warning">You have 
             @{
             @Model.AllAppointments.Where(x => x.status == Status.Waiting).Count();
             }
-            new waiting appointments!</h1>
+            waiting appointments!</h1>
         <br />
         <h2 class="text text-primary">Manage them now 
             <a asp-controller="Appointment" asp-action="WaitingAppointments">
@@ -28,3 +28,15 @@
 } else {
     <h1>Nothing to see here.</h1>
 }
+
+<script>
+    function myFunction() {
+    if (document.getElementById("pls").innerHTML.includes("no")) {
+        console.log('No waiting appointments.');
+    } else {
+        console.log('You have a waiting appointment!');
+    }
+
+    var interval = setInterval(function () { myFunction(); }, 10000);
+}
+</script>

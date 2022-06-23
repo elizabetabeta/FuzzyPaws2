@@ -58,14 +58,14 @@
                         <br />
                         @if(User.IsInRole("Vet")){
                             @if(@Model.status != Status.Rejected){
-                            <p class="card-text">Expected price: @Model.ExpectedPrice</p>
+                            <p class="card-text">Expected price: $@Model.ExpectedPrice</p>
                             }
                             @if(@Model.FinalPrice != 0)
                             {
-                                <p class="card-text text-success">Final Price: @Model.FinalPrice</p>
+                                <p class="card-text text-success">Final Price: $@Model.FinalPrice</p>
                             }
 
-                            <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@Model.Id" class="btn btn-light mx-2">
+                            <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@Model.Id" class="btn btn-outline-info mx-2">
                                    Change status and/or price
                             </a></td>
                         }
@@ -87,7 +87,14 @@
                         Delete
                     </a>
 }*@
-<a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary" style="width:250px">
+<a asp-controller="Appointment" asp-action="Index" class="btn btn-primary">
     All appointments
 </a>
-                    
+@if(User.IsInRole("Vet")){
+<a asp-controller="Appointment" asp-action="AppointmentsToday" class="btn btn-outline-success">
+    Appointments for today
+</a>     
+<a asp-controller="Appointment" asp-action="WaitingAppointments" class="btn btn-outline-warning">
+    Waiting appointments
+</a>   
+}

@@ -8,7 +8,8 @@
     <div class="row pt-4">
         <div class="col-6">
             <h2 class="text-primary"> 
-                Unavailable pets 
+                Unavailable pets                 
+                <i class="fa-solid fa-heart-circle-xmark"></i>
                 <div class="btn-group">
                   <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                     <span class="visually-hidden">Toggle Dropdown</span>
@@ -20,7 +21,6 @@
                         asp-controller="Pet" asp-action="Available">Available pets</a></li>
                   </ul>
                 </div>
-                <img src="~/images/cat-icon.png" style="height50px;width:50px"/>
             </h2>
         </div>
 
@@ -28,7 +28,7 @@
         {
         <div class="col-6 text-end">
             <a asp-controller="Pet" asp-action="Create" class="btn btn-primary"> 
-                <i class="bi bi-plus-circle"></i>
+                <i class="fa-solid fa-heart-circle-plus"></i>
                 Add new pet
              </a>
         </div>
@@ -37,9 +37,23 @@
     </div>
 
     <div class="row pt-4">
-       <h3 class="text text-success">Number of pets unavailable: 
-           @Model.AllPets.Where(x => x.IsSold == true).Count()
-       </h3>
+       <div class="col-6">
+           <h3 class="text text-danger">Number of unavailable pets: 
+               @Model.AllPets.Where(x => x.IsSold == true).Count()
+           </h3>
+       </div>
+
+        <form asp-action="Unavailable" method="get" class="col-6 text-end">
+              <div class="form-actions no-color">
+                   <p>
+                        <input id="search" placeholder="Pet name, breed or type..." type="text" name="search" value="@ViewData["CurrentFilter"]" />
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <a asp-action="Unavailable" class="btn btn-outline-danger">Unavailable pets</a>
+                   </p>
+              </div>
+        </form>
     </div>
 
 </div>
@@ -58,7 +72,9 @@
                         <h5 class="card-title">@pet.Name</h5>
                     </a>
 
-                    <h6 class="text text-danger">Status: @(pet.IsSold ? "Sold":"Available")</h6>
+                    <h6 class="text text-danger">
+                        <i class="fa-solid fa-x"></i>
+                        @(pet.IsSold ? "Sold":"Available")</h6>
 
                 </div>
             </div>

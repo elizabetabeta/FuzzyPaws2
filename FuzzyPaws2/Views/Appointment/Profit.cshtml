@@ -42,6 +42,11 @@
     </div>
 </div>
 <br />
+<div class="row">
+    <div class="col-md-12 text-end">
+        <a asp-controller="Appointment" asp-action="Index" class="btn btn-primary">All appointments</a>
+    </div>
+</div>
 @*<p>    
     Profit in July: @(Model.AllAppointments.Where(x => x.Time.Month == 7).Sum(b => b.FinalPrice))$
 </p>
@@ -59,7 +64,7 @@
 @while( i < DateTime.Now.Month + 1)
 {
        <h6 class="text-success">
-           @(getMonthName(i)): @(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))$
+           @(getMonthName(i)): $@(Model.AllAppointments.Where(x => x.Time.Month == i).Sum(b => b.FinalPrice))
        </h6>
     for(int d = 1; d < 31; d++)
     {
@@ -68,10 +73,10 @@
                                       .Sum(b => b.FinalPrice) != 0) 
                  {
                          <li>
-                             @(getMonthName(i)) @(d): @(Model.AllAppointments
+                             @(getMonthName(i)) @(d): $@(Model.AllAppointments
                                      .Where(x => x.Time.Month == i &&
                                                  x.Time.Day == d)
-                                     .Sum(b => b.FinalPrice))$
+                                     .Sum(b => b.FinalPrice))
                          </li>
                  }
         

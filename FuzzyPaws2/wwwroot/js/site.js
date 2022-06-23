@@ -2,3 +2,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+function myFunction() {
+    if (document.getElementById('pls').innerHTML == "There is no new waiting appointments.") {
+        console.log('No waiting appointments.');
+    } else {
+        console.log('You have a waiting appointment!');
+    }
+
+    var interval = setInterval(function () { myFunction(); }, 10000);
+}

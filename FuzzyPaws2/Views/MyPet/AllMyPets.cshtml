@@ -1,0 +1,72 @@
+﻿@using Microsoft.AspNetCore.Identity;
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@model MyPetIndexViewModel
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h2 class="text-primary"> 
+                Pets added by our users <i class="fa-solid fa-frog fa-bounce"></i>
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-controller="MyPet" asp-action="Create" class="btn btn-primary"> 
+                <i class="fa-solid fa-heart-circle-plus"></i>
+                Add your pet
+             </a>
+             <a asp-controller="MyPet" asp-action="Index" class="btn btn-success"> 
+             <i class="fa-solid fa-paw"></i>
+                My Pets
+             </a>
+        </div>
+    </div>
+</div>
+
+@if(Model.MyPets.Count() == 0)
+{
+    <br /><br />
+    <div class="text-center">
+    <h1 class="text-success">You don't have any pets yet, 
+        <a asp-controller="MyPet" asp-action="Create">
+        add</a> one now!</h1>
+    <br />
+    <img src="~/images/no-data-cat.png" class="img-fluid w-50"/>
+    </div>
+} 
+else
+{
+    <div class="row">
+         @foreach(var pet in Model.MyPets) {
+            <div class="card mb-3 me-2" style="max-width: 500px;">
+              <div class="row g-0">
+                <div class="col-md-4">
+                    <img class="card-img-top" class="mb-2 mt-1" height="100%" width="100" src="@FileLocation.RetriveFileFromFolder@pet.Image" asp-append-version="true" alt="This user is lazy and didn't add an image yet." />  
+                </div>
+                <div class="col-md-8">
+                  <div class="card-body">
+                    <h5 class="card-title text-primary">@pet.Name</h5>
+                        <br>
+                        @if(@UserManager.GetUserId(User).Equals(@pet.UserId))
+                        {
+                                <a asp-controller="MyPet" asp-action="Details" asp-route-id="@pet.Id"
+                                class="btn btn-outline-success">
+                                Oh look! It's your pet! <i class="fa-solid fa-heart fa-beat"></i>
+                                </a>
+                        } else
+                        {
+                                <a asp-controller="MyPet" asp-action="Details" asp-route-id="@pet.Id"
+                                class="btn btn-outline-primary">
+                                    Check <i class="fa-solid fa-paw"></i>
+                                </a>
+                        }
+                        </div>
+                </div>
+              </div>
+            </div>
+         }
+    </div>
+}
+

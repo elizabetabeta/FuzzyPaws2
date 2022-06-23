@@ -28,7 +28,7 @@
         {
         <div class="col-6 text-end">
             <a asp-controller="Pet" asp-action="Create" class="btn btn-primary"> 
-                <i class="bi bi-plus-circle"></i>
+                <i class="fa-solid fa-heart-circle-plus"></i>
                 Add new pet
              </a>
         </div>
@@ -37,36 +37,21 @@
     </div>
 
     <div class="row pt-4">
-
-        <form asp-action="Index" method="get" class="col-6">
+        <div class="col-6">
+            <h3 class="text text-success">Number of pets: @Model.AllPets.Count()</h3>
+        </div>
+         <form asp-action="Index" method="get" class="col-6 text-end">
               <div class="form-actions no-color">
                    <p>
-                        <input id="search" placeholder="Name..." type="text" name="search" value="@ViewData["CurrentFilter"]" />
-                        <input type="submit" value="Search by name" class="btn btn-primary" />
+                        <input id="search" placeholder="Pet name, breed or type..." type="text" name="search" value="@ViewData["CurrentFilter"]" />
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-success">Full List</a>
                    </p>
               </div>
         </form>
-        <div class="col-6 text-end">
-            <h3 class="text text-success">Number of pets: @Model.AllPets.Count()</h3>
-        </div>
     </div>
-     <form asp-action="Index" method="get" class="col-6">
-            <div class="form-actions no-color">
-                <p>
-                    <input id="search" placeholder="Cat, dog, bird..." type="text" name="type" value="@ViewData["CurrentFilter2"]" />
-                    <input type="submit" value="Search by type" class="btn btn-primary" /> 
-                </p>
-            </div>
-    </form>
-    <form asp-action="Index" method="get" class="col-6">
-            <div class="form-actions no-color">
-                <p>
-                    <input id="search" placeholder="Persian, labrador, budgie..." type="text" name="breed" value="@ViewData["CurrentFilter3"]" />
-                    <input type="submit" value="Search by breed" class="btn btn-primary" /> 
-                    <a asp-action="Index" class="btn btn-secondary">Full List</a>
-                </p>
-            </div>
-    </form>
 
 </div>
 

@@ -38,9 +38,7 @@ namespace FuzzyPaws2.Services
         }
 
         //GET ZA VIEW SVIH PET
-        public async Task<PetIndexViewModel> GetPetsAsync(string? search, 
-                                                          string? type, 
-                                                          string? breed
+        public async Task<PetIndexViewModel> GetPetsAsync(string? search                                                         
                                                           /*int currentPage , [FromQuery] PetParameters petParameters*/)
         {
             //int maxRows = 10;
@@ -49,37 +47,14 @@ namespace FuzzyPaws2.Services
             {
                 var searchModel = new PetIndexViewModel()
                 {
-                    AllPets = await _context.Pets.Where(x => x.Name.Contains(search))
+                    AllPets = await _context.Pets.Where(x => x.Name.Contains(search)
+                                                          || x.PetType.Name.Contains(search)
+                                                          || x.PetBreed.Name.Contains(search))
                     .OrderByDescending(x => x.Id)
                     .ToListAsync()
                 };
 
                 return searchModel;
-
-            }
-
-            else if (!String.IsNullOrEmpty(type))
-            {
-                var typeModel = new PetIndexViewModel()
-                {
-                    AllPets = await _context.Pets.Where(x => x.PetType.Name.Contains(type))
-                    .OrderByDescending(x => x.Id)
-                    .ToListAsync()
-                };
-
-                return typeModel;
-
-            }
-            else if (!String.IsNullOrEmpty(breed))
-            {
-                var breedModel = new PetIndexViewModel()
-                {
-                    AllPets = await _context.Pets.Where(x => x.PetBreed.Name.Contains(breed))
-                    .OrderByDescending(x => x.Id)
-                    .ToListAsync()
-                };
-
-                return breedModel;
 
             }
 

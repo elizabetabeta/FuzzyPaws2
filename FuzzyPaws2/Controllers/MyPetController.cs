@@ -40,6 +40,12 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> AllMyPets()
+        {
+            var model = await _myPetService.ShowAllMyPetsAsync();
+            return View(model);
+        }
+
         public async Task<IActionResult> Details(int id)
         {
             var model = await _myPetService.GetMyPetsById(id);

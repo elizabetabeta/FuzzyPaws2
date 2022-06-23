@@ -8,10 +8,18 @@
 <br />
 <div class="row">
     <div class="col-5">
-        <img class="w-100" id="imgshadow"
-        src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
-        alt="What are you waiting for? Add my pic!">
-            </div>
+        @if (@UserManager.GetUserId(User).Equals(@Model.UserId))
+        {
+            <img class="w-100" id="imgshadow"
+            src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
+            alt="What are you waiting for? Add my pic!">
+        } else
+        {
+            <img class="w-100" id="imgshadow"
+            src="@FileLocation.RetriveFileFromFolder@Model.Image" class="img-thumbnail"  asp-append-version="true"
+            alt="This user is lazy so we cannot see this adorable pet yet...">
+        }
+        </div>
                 <div class="col">
                     <div class = "align-items-center">
                         <h3 class="card-title text-primary">@Model.Name</h3>
@@ -31,25 +39,30 @@
                         <br />
                         <p class="card-text">@Model.Description</p>
                         <h6 class="text text-success">Owner: @Model.UserName </h6>
+                        @if (@UserManager.GetUserId(User).Equals(@Model.UserId))
+                        {
+                            <br /><br /><br />
+                            <a asp-controller="MyPet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">
+                                <i class="bi bi-pen"></i>
+                                Edit
+                            </a>
+
+                            <a asp-controller="MyPet" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"> 
+                                <i class="bi bi-trash3"></i>
+                                Delete
+                            </a>
+                        }
                     </div>
             </div>  
  </div>
 
  <br />
  <hr />
-@if (@UserManager.GetUserId(User).Equals(@Model.UserId))
-{
-    <a asp-controller="MyPet" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary mx-2">
-        <i class="bi bi-pen"></i>
-        Edit
+
+    <a asp-controller="MyPet" asp-action="Index" class="btn btn-primary">
+        My pets <i class="fa-solid fa-heart fa-beat"></i>
+    </a>
+    <a asp-controller="MyPet" asp-action="AllMyPets" class="btn btn-outline-success">
+        All pets <i class="fa-solid fa-paw"></i>
     </a>
 
-    <a asp-controller="MyPet" asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"> 
-        <i class="bi bi-trash3"></i>
-        Delete
-    </a>
-
-    <a asp-controller="MyPet" asp-action="Index" class="btn btn-secondary">
-        All my pets
-    </a>
-}

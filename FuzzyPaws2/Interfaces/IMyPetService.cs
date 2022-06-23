@@ -7,6 +7,7 @@ namespace FuzzyPaws2.Interfaces
     public interface IMyPetService
     {
         Task<MyPetIndexViewModel> ShowMyPetsAsync();
+        Task<MyPetIndexViewModel> ShowAllMyPetsAsync();
         Task<MyPetDetailsViewModel> GetMyPetsById(int petId);
         MyPet GetById(int id);
         Task<MyPetCreateViewModel> CreateViewModelAsync();

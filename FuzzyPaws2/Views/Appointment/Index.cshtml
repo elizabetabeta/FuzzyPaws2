@@ -16,12 +16,18 @@
                   </button>
                   <ul class="dropdown-menu">
                     <li><a class="dropdown-item" 
+                        asp-controller="Appointment" asp-action="AppointmentsToday">
+                         Appointments for today
+                    </a></li>
+                    <li><a class="dropdown-item" 
                         asp-controller="Appointment" asp-action="WaitingAppointments">
                          Waiting
                     </a></li>
                   </ul>
                 </div>
                 }
+                <img class="img-fluid" style="height:100px;width:100px"
+                    src="https://cdnb.artstation.com/p/assets/images/images/040/940/717/original/akai-suiren-catwalkgif.gif?1630329430"/>
             </h2>
         </div>
         <div class="col-6 text-end">
@@ -40,108 +46,78 @@
 
         </div>
     </div>
-</div>
+</div>         
 
-<table class="table table-hover">
-    <thead>
+ <div class="card">
+                  
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-striped table-valign-middle">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Description</th>
+                    <th>Details</th>
+                    <th>Status</th>
+
+                        @if (User.IsInRole("Vet"))
+                        {
+                            <th>Expected price</th>
+                            <th>Final price</th>
+                            <th>Change status</th>
+                        }
+            </tr>
+            </thead>
+        <tbody>       
+                                 
+    @foreach(var app in Model.AllAppointments){
     <tr>
-      <th scope="col"></th>
-      <th scope="col">Time</th>
-      <th scope="col">Description</th>
-      <th scope="col">Details</th>
-      <th scope="col">Status</th>
-            @if (User.IsInRole("Vet"))
-            {
-                <th scope="col">Expected Price</th>
-                <th scope="col">Final Price</th>
-                <th scope="col">Change status</th>
-            }
+        <td>
+             @app.Time
+        </td>
+        <td>
+            @app.Description
+        </td>
+        <td>
+            <a asp-controller="Appointment" asp-action="Details" asp-route-id="@app.Id" class="text-muted">
+                <i class="fas fa-search"></i>
+            </a>
+        </td>
+        @if (app.status.Equals(Status.Rejected))
+        {
+            <td>
+                <button disabled class="btn btn-danger">@app.status</button>
+            </td>
+        }else if (app.status.Equals(Status.Confirmed))
+        {
+            <td>
+                <button disabled class="btn btn-success">@app.status</button>
+            </td>
+        }else if (app.status.Equals(Status.Waiting))
+        {
+            <td>
+                <button disabled class="btn btn-warning">@app.status</button>
+            </td>
+        } else
+        {
+            <td>
+                @app.status
+            </td>        
+        }
+        @if(User.IsInRole("Vet")){
+            <td>$@(app.ExpectedPrice)</td>
+            <td>$@(app.FinalPrice)</td>
+            <td>
+                <a asp-controller="Appointment" asp-action="Status" asp-route-id="@app.Id" class="btn btn-outline-primary">
+                     Change status
+                </a>
+            </td>
+        }
     </tr>
-  </thead>
-@foreach(var appointment in Model.AllAppointments)
-    {
-        <tbody>
-        @if (appointment.status.Equals(Status.Waiting))
-        {
-            <tr style="background-color:#fff457">
-              <th scope="row"></th>
-              <td>@appointment.Time</td>
-              <td>@appointment.Description</td>
-              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
-                  <i class="bi bi-three-dots"></i>
-              </a></td>
-              <td>@appointment.status</td>
-              @if (User.IsInRole("Vet"))
-            {
-              <td>@(appointment.ExpectedPrice)$</td>
-              <td></td>
-              <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
-                        Change status
-              </a></td>
-            }
-            </tr>
-      
-        } else if(appointment.status.Equals(Status.Confirmed)) 
-        {
-            <tr style="background-color:lightgreen">
-              <th scope="row"></th>
-              <td>@appointment.Time</td>
-              <td>@appointment.Description</td>
-              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
-                  <i class="bi bi-three-dots"></i>
-              </a></td>
-              <td>@appointment.status</td>
-              @if (User.IsInRole("Vet"))
-                {
-                  <td>@(appointment.ExpectedPrice)$</td>
-                  <td></td>
-                  <td>
-                      <a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
-                            Change status
-                      </a>
-                  </td>
-                }
-            </tr>
-            } else if(appointment.status.Equals(Status.Rejected))
-            {
-            <tr style="background-color:lightcoral">
-              <th scope="row"></th>
-              <td>@appointment.Time</td>
-              <td>@appointment.Description</td>
-              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
-                  <i class="bi bi-three-dots"></i>
-              </a></td> 
-              <td>@appointment.status</td>
-                  @if (User.IsInRole("Vet"))
-                    {
-                      <td>@(appointment.ExpectedPrice)$</td>
-                      <td></td>
-                      <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
-                                Change status
-                      </a></td>
-                    }
-            </tr>
-            } else
-            {
-            <tr>
-              <th scope="row"></th>
-              <td>@appointment.Time</td>
-              <td>@appointment.Description</td>
-             <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
-                  <i class="bi bi-three-dots"></i>
-              </a></td>
-              <td>@appointment.status</td>
-              @if (User.IsInRole("Vet"))
-                {
-                  <td>@(appointment.ExpectedPrice)$</td>
-                  <td>@(appointment.FinalPrice)$</td>
-                  <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
-                                Add price
-                  </a></td>
-                }
-            </tr>
-            }
-        </tbody>
- }
- </table>
+        }
+        
+    </tbody>
+</table>
+</div>
+</div>
 

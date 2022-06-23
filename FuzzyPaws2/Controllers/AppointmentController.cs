@@ -36,11 +36,20 @@ namespace FuzzyPaws2.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "Vet")]
         public async Task<IActionResult> WaitingAppointments()
         {
             var model = await _appointmentService.GetAppointmentsAsync();
             return View(model);
         }
+
+        [Authorize(Roles = "Vet")]
+        public async Task<IActionResult> AppointmentsToday()
+        {
+            var model = await _appointmentService.GetAppointmentsAsync();
+            return View(model);
+        }
+
         public async Task<IActionResult> Notification()
         {
             var model = await _appointmentService.GetAppointmentsAsync();
@@ -200,6 +209,65 @@ namespace FuzzyPaws2.Controllers
             return File(workStream, "application/pdf", strPDFFileName);
         }
 
+        public FileResult CreatePdfForToday()
+        {
+            MemoryStream workStream = new MemoryStream();
+            StringBuilder status = new StringBuilder("");
+            DateTime dTime = DateTime.Now;
+            string strPDFFileName = string.Format("AppointmentsTodayDetailsPdf" + dTime.ToString("yyyyMMdd") + "-" + ".pdf");
+            Document doc = new Document();
+            doc.SetMargins(0, 0, 0, 0);
+            PdfPTable tableLayoutForToday = new PdfPTable(4);
+            doc.SetMargins(10, 10, 10, 0);
+            PdfWriter.GetInstance(doc, workStream).CloseStream = false;
+            doc.Open();
+            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            Font fontInvoice = new Font(bf, 20, Font.NORMAL);
+            Paragraph paragraph = new Paragraph("Today's Appointments", fontInvoice);
+            paragraph.Alignment = Element.ALIGN_CENTER;
+            doc.Add(paragraph);
+
+            var expectedProfit = _context.Appointments.Where(x => x.ExpectedPrice > 0 && x.Time.Day == DateTime.Now.Day && x.status == Models.Status.Finished).Sum(b => b.ExpectedPrice);
+            var actualProfit = _context.Appointments.Where(x => x.FinalPrice > 0 && x.Time.Day == DateTime.Now.Day).Sum(b => b.FinalPrice);
+
+            Paragraph mp = new Paragraph("\nExpected profit: $" + expectedProfit);
+            mp.Alignment = Element.ALIGN_RIGHT;
+            doc.Add(mp);
+
+            Paragraph p3 = new Paragraph();
+            p3.SpacingAfter = 6;
+            doc.Add(p3);
+
+            Paragraph month = new Paragraph("Today's appointments: \n\n");
+            doc.Add(month);
+            doc.Add(Add_Content_To_PDF_For_Today(tableLayoutForToday));
+
+            Paragraph ap = new Paragraph("\nActual profit: $" + actualProfit);
+            ap.Alignment = Element.ALIGN_RIGHT;
+            doc.Add(ap);
+
+
+            var year = DateTime.Now.Year;
+            var now = DateTime.Now.Date;
+            var nowYear = now.Year;
+            var nowMonth = now.Month;
+            var nowDay = now.Day;
+
+            var userId = this.User.FindFirstValue(ClaimTypes.Name);
+
+            Paragraph stamp = new Paragraph("\n\n\n\n\n\n©" + year + " - FuzzyPaws\nDate: " +
+                nowDay + "." + nowMonth + "." + nowYear + "." +
+                "\nVet: " + userId);
+            stamp.Alignment = Element.ALIGN_CENTER;
+            doc.Add(stamp);
+
+            doc.Close();
+            byte[] byteInfo = workStream.ToArray();
+            workStream.Write(byteInfo, 0, byteInfo.Length);
+            workStream.Position = 0;
+            return File(workStream, "application/pdf", strPDFFileName);
+        }
+
         protected PdfPTable Add_Content_To_PDF(PdfPTable tableLayout)
         {
             float[] headers = { 50, 24, 45, 35 }; //Header Widths  
@@ -226,6 +294,35 @@ namespace FuzzyPaws2.Controllers
                 }
             }
             return tableLayout;
+        }
+
+        protected PdfPTable Add_Content_To_PDF_For_Today(PdfPTable tableLayoutToday)
+        {
+            float[] headers = { 50, 24, 45, 35 }; //Header Widths  
+            tableLayoutToday.SetWidths(headers); //Set the pdf headers  
+            tableLayoutToday.WidthPercentage = 100; //Set the PDF File witdh percentage  
+            tableLayoutToday.HeaderRows = 1;
+            var count = 1;
+            //Add header  
+            AddCellToHeader(tableLayoutToday, "Date/Time");
+            AddCellToHeader(tableLayoutToday, "Status");
+            AddCellToHeader(tableLayoutToday, "Expected price");
+            AddCellToHeader(tableLayoutToday, "Final Price");
+
+            foreach (var app in _context.Appointments.Where(x => x.status == Models.Status.Finished
+                                                              && x.Time.Day == DateTime.Now.Day))
+            {
+                if (count >= 1)
+                {
+                    //Add body  
+                    AddCellToBody(tableLayoutToday, app.Time.ToString(), count);
+                    AddCellToBody(tableLayoutToday, app.status.ToString(), count);
+                    AddCellToBody(tableLayoutToday, "$" + app.ExpectedPrice.ToString(), count);
+                    AddCellToBody(tableLayoutToday, "$" + app.FinalPrice.ToString(), count);
+                    count++;
+                }
+            }
+            return tableLayoutToday;
         }
 
         protected PdfPTable Add_Content_To_PDF_This_Month(PdfPTable tableLayout)

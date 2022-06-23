@@ -3,74 +3,87 @@
 @{
     ViewData["Title"] = "Index";
 }
-<div class="container p-3">
-    <div class="row pt-4">
-        <div class="col-6">
-            <h2 class="text-primary"> 
-                Waiting Appointments
-            </h2>
-        </div>
-        <div class="col-6 text-end">
+<br />
+<div class="container">
+<div class="row">
+    <div class="col-6">
+        <img id="kitty"
+            src="https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/eb52a251-b206-45a4-8cc1-fde2e44c25c0/dbgadcv-98031633-6582-4480-80f9-1512ef321b38.png/v1/fill/w_1024,h_622,strp/sleeping_black_cat_png_by_simfonic_dbgadcv-fullview.png?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NjIyIiwicGF0aCI6IlwvZlwvZWI1MmEyNTEtYjIwNi00NWE0LThjYzEtZmRlMmU0NGMyNWMwXC9kYmdhZGN2LTk4MDMxNjMzLTY1ODItNDQ4MC04MGY5LTE1MTJlZjMyMWIzOC5wbmciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.JaL2Wn6diEiWxw-FDRQF0Jqjwp2oyNs7T0n9TN9a4x8"/>
+    </div>
+    <div class="col-6 text-end">
             <a asp-controller="Appointment" asp-action="Create" class="btn btn-primary"> 
-                Make an appointment
+                <i class="fa-light fa-calendar-circle-plus"></i> Make an appointment
              </a>
-        </div>
     </div>
 </div>
+</div>
+
 @if(Model.AllAppointments.Where(x => x.status == Status.Waiting).Count().Equals(0))
-{
-    <h1>There's no waiting appointments right now.</h1>
-}
-else
-{   
+    {
+        <h1 class="text text-success text-center">No waiting appointments!
+            <i class="fa-solid fa-dragon"></i> <br>
+            Just chill... <i class="fa-solid fa-mug-saucer"></i>
+            <br>
+            <img class="img-fluid" src="https://www.kindpng.com/picc/m/267-2675686_transparent-gray-cat-png-cat-sleeping-png-png.png">
+        </h1>
 
-<table class="table table-hover">
-    <thead>
-    <tr>
-      <th scope="col"></th>
-      <th scope="col">Time</th>
-      <th scope="col">Description</th>
-      <th scope="col">Details</th>
-      <th scope="col">Status</th>
-            @if (User.IsInRole("Vet"))
-            {
-                <th scope="col">Expected Price</th>
-                <th scope="col">Final Price</th>
-                <th scope="col">Change status</th>
-            }
-    </tr>
-  </thead>
-@foreach(var appointment in Model.AllAppointments)
-{
-    <tbody>
-        @if (appointment.status.Equals(Status.Waiting))
-        {
-            <tr style="background-color:#fff457">
-              <th scope="row"></th>
-              <td>@appointment.Time</td>
-              <td>@appointment.Description</td>
-              <td><a asp-controller="Appointment" asp-action="Details" asp-route-id="@appointment.Id">
-                  <i class="bi bi-three-dots"></i>
-              </a></td>
-              <td>@appointment.status</td>
-              @if (User.IsInRole("Vet"))
-            {
-              <td>@(appointment.ExpectedPrice)$</td>
-              <td></td>
-              <td><a asp-controller="Appointment" asp-action="Status" asp-route-id="@appointment.Id" class="btn btn-light mx-2">
-                        Change status
-              </a></td>
-            }
+                    
+    }
+    else
+    {
+    <div class="card">
+        <div class="card-header border-0">
+            <h3 class="card-title text-warning">Waiting appointments
+                         <i class="fas fa-circle-notch fa-spin"></i>
+            </h3>
+        <div class="card-tools">
+       
+    </div>
+    </div>
+    <div class="card-body table-responsive p-0">
+        <table class="table table-striped table-valign-middle">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Description</th>
+                    <th>Details</th>
+                    <th>Expected price</th>
+                    <th>Final price</th>
+                    <th>Change status</th>
             </tr>
-      
-        } 
+            </thead>
+        <tbody>       
+                                 
+    @foreach(var app in Model.AllAppointments.Where(x => x.status == Status.Waiting)){
+    <tr>
+        <td>
+             @app.Time
+        </td>
+        <td>
+            @app.Description
+        </td>
+        <td>
+            <a asp-controller="Appointment" asp-action="Details" asp-route-id="@app.Id" class="text-muted">
+                <i class="fas fa-search"></i>
+            </a>
+        </td>
+        <td>$@(app.ExpectedPrice)</td>
+        <td>$@(app.FinalPrice)</td>
+        <td>
+            <a asp-controller="Appointment" asp-action="Status" asp-route-id="@app.Id" class="btn btn-outline-primary">
+                 Change status
+            </a>
+        </td>
+    </tr>
+        }
+        
     </tbody>
- }
- </table>
+</table>
+</div>
+</div>
+}
 
- }
-
- <div class="container p-3">
+<div class="container p-3">
     <div class="row pt-4">
         <div class="col-6"></div>
 
@@ -78,7 +91,19 @@ else
              <a asp-controller="Appointment" asp-action="Index" class="btn btn-secondary"> 
                   All appointments
              </a>
+             <a asp-controller="Appointment" asp-action="AppointmentsToday" class="btn btn-outline-success"> 
+                  Appointments for today
+             </a>
         </div>
 
     </div>
 </div>
+
+<style>
+    #kitty{
+        height:90px;
+        width:140px;
+        -webkit-transform: scaleX(-1);
+        transform: scaleX(-1);
+    }
+</style>

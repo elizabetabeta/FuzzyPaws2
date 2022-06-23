@@ -31,11 +31,11 @@
             <img src="@FileLocation.RetriveFileFromFolder@Model.ExistingImage" class="img-thumbnail" height="100" width="100" asp-append-version="true" />
         </div>
         
-        <button type="submit" class="btn btn-primary" style="width:150px">
+        <button type="submit" class="btn btn-primary">
             Update
         </button>
-        <a asp-controller="PetBreed" asp-action="Index" class="btn btn-secondary" style="width:250px">
-            Go back to the list of breeds...
+        <a asp-controller="PetBreed" asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">
+            Cancel
         </a>
     </div>
 </form>

@@ -9,15 +9,16 @@
     </div>
                 <div class="col">
                     <div>
-                        <h5 class="card-title text-primary">@Model.Name</h5>
+                        <h1 class="card-title text-primary">@Model.Name</h1>
                          <hr />
                         <p class="card-text">@Model.Description</p>
 
-                        <br /><br /><br />
-                        <div class="btn btn-outline-info">
+                        <br /><br /><br /><br /><br />
+                        <div class="btn btn-outline-success">
+                            Check out all our
                             <a href="/Pet?breed=@Model.Name">
                                 <h4 class="text text-primary">
-                                Check out all our @(Model.Name.ToLower())s!
+                                @(Model.Name.ToLower())s!
                                 </h4>
                             </a>
                         </div>
@@ -40,7 +41,7 @@
                         Delete
                     </a>
 } &nbsp;
-    <a asp-controller="PetBreed" asp-action="Index" class="btn btn-secondary">
+    <a asp-controller="PetBreed" asp-action="Index" class="btn btn-outline-primary">
     All breeds
     </a>
 

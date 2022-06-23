@@ -47,6 +47,18 @@ namespace FuzzyPaws2.Services
             return model;
         }
 
+        public async Task<MyPetIndexViewModel> ShowAllMyPetsAsync()
+        {
+            var model = new MyPetIndexViewModel()
+            {
+                MyPets = await _context.MyPets.
+                OrderByDescending(x => x.Id).
+                ToListAsync()
+            };
+
+            return model;
+        }
+
         public MyPet GetById(int id)
         {
             return _context.MyPets.FirstOrDefault(x => x.Id == id);

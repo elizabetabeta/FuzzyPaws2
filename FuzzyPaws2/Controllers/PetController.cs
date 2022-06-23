@@ -31,36 +31,30 @@ namespace FuzzyPaws2.Controllers
             _selectListService = selectListService;
         }
 
-        public async Task<IActionResult> Index(string search, 
-                                               string type,
-                                               string breed)
+        public async Task<IActionResult> Index(string search)
         {
             ViewData["CurrentFilter"] = search;
-            ViewData["CurrentFilter2"] = type;
-            ViewData["CurrentFilter3"] = breed;
 
-            var model = await _petService.GetPetsAsync(search, type, breed);
+
+            var model = await _petService.GetPetsAsync(search);
 
             return View(model);
         }
 
-        public async Task<IActionResult> Available(string search, string type, string breed)
+        public async Task<IActionResult> Available(string search)
         {
             ViewData["CurrentFilter"] = search;
-            ViewData["CurrentFilter2"] = type;
-            ViewData["CurrentFilter3"] = breed;
 
-            var model = await _petService.GetPetsAsync(search, type, breed);
+
+            var model = await _petService.GetPetsAsync(search);
             return View(model);
         }
 
-        public async Task<IActionResult> Unavailable(string search, string type, string breed)
+        public async Task<IActionResult> Unavailable(string search)
         {
             ViewData["CurrentFilter"] = search;
-            ViewData["CurrentFilter2"] = type;
-            ViewData["CurrentFilter3"] = breed;
 
-            var model = await _petService.GetPetsAsync(search, type, breed);
+            var model = await _petService.GetPetsAsync(search);
             return View(model);
         }
 

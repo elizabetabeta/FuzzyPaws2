@@ -9,7 +9,7 @@
             </div>
                 <div class="col">
                     <div class = "align-items-center">
-                        <h3 class="card-title text-primary">@Model.Name</h3>
+                        <h2 class="card-title text-primary">@Model.Name</h2>
                         <hr />
                         <h5 class="card-text">@Model.PetTypeName
                             &nbsp;
@@ -26,7 +26,7 @@
                         </a> </h5>
                         <br />
                         <p class="card-text">@Model.Description</p>
-                        <p>Price: @Model.Price.ToString()$</p>
+                        <p><b> Price: $@Model.Price.ToString() </b></p>
                         @if (Model.IsSold.Equals(true))
                         {
                             <h6 class="text text-danger">Status: 
@@ -46,17 +46,16 @@
                         }
                         <br /><br /><br />                      
 
-                        <div class="btn btn-outline-info">
-                            <a href="/Pet?type=@Model.PetTypeName">
-                                <h4 class="text text-primary">
-                                Check out all our @(Model.PetTypeName.ToLower())s
-                                </h4>
-                            </a>
-                           <a href="/Pet?breed=@Model.PetBreedName">
-                                <h4 class="text text-primary">
-                                or @(Model.PetBreedName.ToLower())s!
-                                </h4>
-                            </a>
+                        <div class="btn btn-outline-success">
+                            Check out another
+                            <a href="/Pet?search=@Model.PetTypeName">
+                                 @(Model.PetTypeName.ToLower())
+                            </a> ?
+                            <br />
+                            Or another 
+                           <a href="/Pet?search=@Model.PetBreedName">
+                                @(Model.PetBreedName.ToLower())
+                            </a> ?
                         </div>
             </div>
       </div>  
